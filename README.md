@@ -3,9 +3,10 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the general
 
 # 前言
 - 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用的解题方法。
-- 另外这里有一份[ python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，帮助掌握 python 的各种奇淫巧技，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
+- 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，帮助掌握 python 的各种奇淫巧技，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 
 # 解析
+为了防止视觉干扰，解析末尾不使用句号 🤡 点击标题可跳转对应题目网址。
 ## 数组
 ### [238. Product of Array Except Self 双指针](https://leetcode.com/problems/product-of-array-except-self/)
 ```cpp
