@@ -6,6 +6,6 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the general
 
   This project aims to collect the most clear thinking of solving problems in leetcode, help clarify the knowledge system of C++ programming, and master general methods of solving problems.
 
-- 另外这里有一份 python 最短题解，帮助掌握 python 语言，同时服用效果更佳。
+- 另外这里有一份[ python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，帮助掌握 python 的各种奇淫巧技，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 
-  In addition, here is a python shortest solution to help you master the python language.
+  In addition, here is a[ python shortest solutions](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions) to help you master the python language.
