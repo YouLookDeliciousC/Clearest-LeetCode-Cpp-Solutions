@@ -2,7 +2,7 @@
 Clearest LeetCode C++ Solutions. This project is intended to clarify the general problem solving ideas
 
 # 前言 Introduction
-- 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助捋顺 C++ 编程知识体系、掌握常规通用的解题方法。
+- 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用的解题方法。
 
   This project aims to collect the most clear thinking of solving problems in leetcode, help clarify the knowledge system of C++ programming, and master general methods of solving problems.
 
