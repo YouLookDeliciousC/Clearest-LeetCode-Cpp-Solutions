@@ -38,3 +38,25 @@ public:
   2.初始化变量l（left）代表左边的乘积，从左到右遍历数组，每次都让新数组的值乘以它左边数字的乘积l，然后更新l。此时新数组里的所有数字就代表了nums数组中对应位置左边所有数字的乘积
   
   3.再从右往左做一遍同样的操作，最终`res[i] = 1 * nums中i左边所有数字的乘积 * nums中i右边所有数字的乘积`
+## 哈希表
+### [36. Valid Sudoku 无序映射表]()
+```cpp
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int n = board.size();
+        vector<unordered_map<char, int>> row(n), col(n);
+        vector<vector<unordered_map<char, int>>> sub(n/3, vector<unordered_map<char, int>>(n/3));
+        
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+                char c = board[i][j];
+                if(c == '.') continue;
+                if(row[i][c]++ > 0 || col[j][c]++ > 0 || sub[i/3][j/3][c]++ > 0) return false;
+            }
+        }
+        return true;
+    }
+};
+```
+- O(N)时间复杂度，为每个分区建立一张映射表，每遍历一个元素就在所属的所有对应分区中记录该值，若发现值已经被更改则证明数独表无效
