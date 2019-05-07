@@ -60,3 +60,28 @@ public:
 };
 ```
 - O(N)时间复杂度，为每个分区建立一张映射表，每遍历一个元素就在所属的所有对应分区中记录该值，若发现值已经被更改则证明数独表无效
+## 链表
+### [206. Reverse Linked List 迭代遍历](https://leetcode.com/problems/reverse-linked-list/)
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode *pre = NULL;
+        while(head){
+            ListNode *next = head -> next;
+            head -> next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+};
+```
