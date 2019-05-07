@@ -85,3 +85,23 @@ public:
     }
 };
 ```
+## 数学
+### [268. Missing Number](https://leetcode.com/problems/missing-number/)
+```cpp
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        
+        int sum = 0;
+        for(int i=0; i<n; ++i){
+            sum += nums[i];
+        }
+        
+        n++;
+        return n * (n - 1) / 2 - sum;
+    }
+};
+```
+- 缺失数字 = 0 加到 n+1 的总和 - 数组中所有数字的总和
+- 计算 0 加到 n+1 的总和，可利用等差数列求和公式，此题可理解为`总和 = (元素个数 / 2) * (首尾两数字之和)`
