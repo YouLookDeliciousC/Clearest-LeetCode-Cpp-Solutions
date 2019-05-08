@@ -1,5 +1,5 @@
 # :crocodile: Clearest-LeetCode-Cpp-Solutions
-Clearest LeetCode C++ Solutions. This project is intended to clarify the general problem solving ideas
+Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas
 
 # 前言
 - 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用的解题方法。
