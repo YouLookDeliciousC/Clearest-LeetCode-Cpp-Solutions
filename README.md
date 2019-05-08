@@ -39,7 +39,7 @@ public:
   
   3.再从右往左做一遍同样的操作，最终`res[i] = 1 * nums中i左边所有数字的乘积 * nums中i右边所有数字的乘积`
 ## 哈希表
-### [36. Valid Sudoku 无序映射表]()
+### [36. Valid Sudoku 哈希表]()
 ```cpp
 class Solution {
 public:
@@ -61,7 +61,7 @@ public:
 ```
 - O(N)时间复杂度，为每个分区建立一张映射表，每遍历一个元素就在所属的所有对应分区中记录该值，若发现值已经被更改则证明数独表无效
 ## 链表
-### [206. Reverse Linked List 迭代遍历](https://leetcode.com/problems/reverse-linked-list/)
+### [206. Reverse Linked List 前后指针](https://leetcode.com/problems/reverse-linked-list/)
 ```cpp
 /**
  * Definition for singly-linked list.
@@ -86,7 +86,7 @@ public:
 };
 ```
 ## 数学
-### [268. Missing Number](https://leetcode.com/problems/missing-number/)
+### [268. Missing Number 等差数列](https://leetcode.com/problems/missing-number/)
 ```cpp
 class Solution {
 public:
@@ -107,7 +107,7 @@ public:
 - 计算 0 加到 n+1 的总和，可利用等差数列求和公式，此题可理解为`总和 = (元素个数 / 2) * (首尾两数字之和)`
 
 ## 双指针
-### [344. Reverse String](https://leetcode.com/problems/reverse-string/)
+### [344. Reverse String 双指针](https://leetcode.com/problems/reverse-string/)
 ```cpp
 class Solution {
 public:
@@ -116,6 +116,16 @@ public:
         while(++i < --j){
             swap(s[i], s[j]);
         }
+    }
+};
+```
+## 位运算
+### [461. Hamming Distance 位运算]
+```cpp
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        return bitset<32>(x ^ y).count();
     }
 };
 ```
