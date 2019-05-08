@@ -7,7 +7,7 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，带您体验 python 中各种让人叹为观止的奇巧解法，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 
 # 解析
-为了防止视觉干扰，解析末尾不使用句号 🤡 点击标题可跳转对应题目网址。
+默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
 ### [238. Product of Array Except Self 双指针](https://leetcode.com/problems/product-of-array-except-self/)
 ```cpp
