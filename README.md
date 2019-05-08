@@ -1,8 +1,9 @@
-# :crocodile: Clearest-LeetCode-Cpp-Solutions
+# :cat2: Clearest-LeetCode-Cpp-Solutions
 Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas
 
 # 前言
 - 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用、简单有效的解题方法。
+- 项目持续更新中，优先使用 C++，不支持的题目使用 C 代替，如果您有希望分享的清晰解法欢迎联系更新~ [直接发issue 或 fork，记得留下署名和联系方式 :bear:]
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，帮助掌握 python 的各种奇淫巧技，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 
 # 解析
