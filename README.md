@@ -105,3 +105,17 @@ public:
 ```
 - 缺失数字 = 0 加到 n+1 的总和 - 数组中所有数字的总和
 - 计算 0 加到 n+1 的总和，可利用等差数列求和公式，此题可理解为`总和 = (元素个数 / 2) * (首尾两数字之和)`
+
+## 双指针
+### [344. Reverse String](https://leetcode.com/problems/reverse-string/)
+```cpp
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        int i = -1, j = s.size();
+        while(++i < --j){
+            swap(s[i], s[j]);
+        }
+    }
+};
+```
