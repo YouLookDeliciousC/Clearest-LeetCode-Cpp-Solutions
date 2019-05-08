@@ -120,7 +120,7 @@ public:
 };
 ```
 ## 位运算
-### [461. Hamming Distance 位运算]
+### [461. Hamming Distance 位运算](https://leetcode.com/problems/hamming-distance/submissions/)
 ```cpp
 class Solution {
 public:
