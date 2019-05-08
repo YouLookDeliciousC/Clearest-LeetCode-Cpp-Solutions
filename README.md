@@ -1,4 +1,4 @@
-# :dragon: Clearest-LeetCode-Cpp-Solutions
+# :crocodile: Clearest-LeetCode-Cpp-Solutions
 Clearest LeetCode C++ Solutions. This project is intended to clarify the general problem solving ideas
 
 # 前言
