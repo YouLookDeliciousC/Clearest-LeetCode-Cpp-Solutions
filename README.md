@@ -39,6 +39,30 @@ public:
   2.初始化变量l（left）代表左边的乘积，从左到右遍历数组，每次都让新数组的值乘以它左边数字的乘积l，然后更新l。此时新数组里的所有数字就代表了nums数组中对应位置左边所有数字的乘积
   
   3.再从右往左做一遍同样的操作，最终`res[i] = 1 * nums中i左边所有数字的乘积 * nums中i右边所有数字的乘积`
+## [448. Find All Numbers Disappeared in an Array 伪哈希](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/)
+```cpp
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        for(int i=0; i<nums.size(); ++i){
+            nums[abs(nums[i])-1] = -abs(nums[abs(nums[i])-1]);
+        }
+        
+        vector<int> r;
+        for(int i=0; i<nums.size(); ++i){
+            if(nums[i] > 0){
+                r.push_back(i+1);
+            }
+        }
+        return r;
+    }
+};
+```
+- 应题目进阶要求，O(N)时间，无额外空间，此解实际上是利用索引把数组自身当作哈希表处理
+- 将 nums 中所有正数作为索引i，置 nums[i] 为负值。那么，仍为正数的位置即为（未出现过）消失的数字
+    - 原始数组：[4,3,2,7,8,2,3,1]
+    - 重置后为：[-4,-3,-2,-7,`8`,`2`,-3,-1]
+    - 结论：[8,2] 分别对应的index为[5,6]（消失的数字）
 ## 哈希表
 ### [36. Valid Sudoku 哈希表]()
 ```cpp
@@ -151,3 +175,6 @@ public:
 - 构建一个哈希表记录所有罗马数字子串，注意长度为2的子串记录的值是（实际值-子串内左边罗马数字代表的数值）
 - 遍历整个s的时候判断当前位置和前一个位置的两个字符组成的字符串是否在字典内，如果在就记录值，不在就说明当前位置不存在小数字在前面的情况，直接记录当前位置字符对应值。整个过程时间复杂度为O(N)
 - 举个例子，遍历经过IV的时候先记录I的对应值1再往前移动一步记录IV的值3，加起来正好是IV的真实值4
+# 解法汇总贡献者
+注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
+- [Knife丶](https://github.com/cy69855522)[QQ1272068154  微信ly18597591102]
