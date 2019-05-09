@@ -132,7 +132,7 @@ public:
 - 计算 0 加到 n+1 的总和，可利用等差数列求和公式，此题可理解为`总和 = (元素个数 / 2) * (首尾两数字之和)`
 
 ## 双指针
-### [344. Reverse String 双指针](https://leetcode.com/problems/reverse-string/)
+### [344. Reverse String 双向指针](https://leetcode.com/problems/reverse-string/)
 ```cpp
 class Solution {
 public:
@@ -145,7 +145,7 @@ public:
 };
 ```
 ## 位运算
-### [461. Hamming Distance 位运算](https://leetcode.com/problems/hamming-distance/submissions/)
+### [461. Hamming Distance 异或](https://leetcode.com/problems/hamming-distance/submissions/)
 ```cpp
 class Solution {
 public:
