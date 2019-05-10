@@ -144,16 +144,6 @@ public:
     }
 };
 ```
-## 位运算
-### [461. Hamming Distance 异或](https://leetcode.com/problems/hamming-distance/submissions/)
-```cpp
-class Solution {
-public:
-    int hammingDistance(int x, int y) {
-        return bitset<32>(x ^ y).count();
-    }
-};
-```
 ## 字符串
 ### [13. Roman to Integer 哈希表](https://leetcode.com/problems/roman-to-integer/)
 ```cpp
@@ -175,6 +165,42 @@ public:
 - 构建一个哈希表记录所有罗马数字子串，注意长度为2的子串记录的值是（实际值-子串内左边罗马数字代表的数值）
 - 遍历整个s的时候判断当前位置和前一个位置的两个字符组成的字符串是否在字典内，如果在就记录值，不在就说明当前位置不存在小数字在前面的情况，直接记录当前位置字符对应值。整个过程时间复杂度为O(N)
 - 举个例子，遍历经过IV的时候先记录I的对应值1再往前移动一步记录IV的值3，加起来正好是IV的真实值4
+## 二分查找
+- 【:flower_playing_cards: 知识卡片】二分查找利用已排好序的数组，每一次查找都可以将查找范围减半。查找范围内只剩一个数据时查找结束。数据量为 n 的数组，将其长度减半 log2n 次后，其中便只剩一个数据了。也就是说，在二分查找中重复执行“将目标数据和数组中间的数据进行比较后将查找范围减半”的操作 log2n 次后，就能找到目标数据（若没找到则可以得出数据不存在的结论），因此它的时间复杂度为 O(logn)
+### [162. Find Peak Element 二分查找](https://leetcode.com/problems/find-peak-element/)
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int l = 0;
+        int r = nums.size() - 1;
+        
+        while(l < r){
+            int m = (l + r) / 2;
+            
+            if(m > 0 and nums[m-1] > nums[m]){
+                r = m - 1;
+            }else if(m < nums.size() and nums[m+1] > nums[m]){
+                l = m + 1;
+            }else{
+                return m;
+            }
+        }
+        return l;
+    }
+};
+```
+- 初始化搜索范围为[0, len(nums)-1]，初始搜索位置为中间位置 m，如果 m 左边存在值比 nums[m] 大，说明[0, m-1]一定存在峰值，我们缩小搜索范围；否则如果 m 右边存在值比 nums[m] 大，说明[m+1, len(nums)-1]一定存在峰值，我们缩小范围；否则 m 就是峰值
+## 位运算
+### [461. Hamming Distance 异或](https://leetcode.com/problems/hamming-distance/submissions/)
+```cpp
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        return bitset<32>(x ^ y).count();
+    }
+};
+```
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522)[QQ1272068154  微信ly18597591102]
