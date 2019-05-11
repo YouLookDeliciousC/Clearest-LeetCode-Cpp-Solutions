@@ -192,6 +192,40 @@ public:
 };
 ```
 - 初始化搜索范围为[0, len(nums)-1]，初始搜索位置为中间位置 m，如果 m 左边存在值比 nums[m] 大，说明[0, m-1]一定存在峰值，我们缩小搜索范围；否则如果 m 右边存在值比 nums[m] 大，说明[m+1, len(nums)-1]一定存在峰值，我们缩小范围；否则 m 就是峰值
+## 分治算法
+### [973. K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        int p = pow(points[0][0], 2) + pow(points[0][1], 2);
+        vector<vector<int>> l, m, r;
+        for(int i=0; i<points.size(); ++i){
+            int v = pow(points[i][0], 2) + pow(points[i][1], 2);
+            if(v < p){
+                l.push_back(points[i]);
+            }else if(v == p){
+                m.push_back(points[i]);
+            }else{
+                r.push_back(points[i]);
+            }
+        }
+        
+        if(K <= l.size()){
+            return kClosest(l, K);
+        }else if(K <= l.size() + m.size()){
+            l.insert(l.end(), m.begin(), m.begin() + K - l.size());
+            return l;
+        }else{
+            r = kClosest(r, K - l.size() - m.size());
+            l.insert(l.end(), m.begin(), m.end());
+            l.insert(l.end(), r.begin(), r.end());
+            return l;
+        }
+    }
+};
+```
+- 快速选择的一般流程，计算lmr，组合
 ## 位运算
 ### [461. Hamming Distance 异或](https://leetcode.com/problems/hamming-distance/submissions/)
 ```cpp
