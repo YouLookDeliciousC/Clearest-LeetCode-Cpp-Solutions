@@ -8,29 +8,6 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，带您体验 python 中各种让人叹为观止的奇巧解法，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 - 欢迎加入QQ交流群：902025048 [∷二维码](QR.png) 群内提供更多相关资料~
 
-
-# 专题探索
-![](思维导图.jpg)
-
-以上是一张互联网公司面试中经常考察的问题类型总结的思维导图，此栏目将根据 LeetCode 中文版探索板块给出的路线制作题解，目标追求思路的常规性，代码的高可读性，各专栏将尽力覆盖各大知识要点。
-## 数据结构，说难也不难
-### [队列 & 栈](https://leetcode-cn.com/explore/learn/card/queue-stack/)
-
-**队列：先入先出的数据结构**
-#### [622. 设计循环队列](https://leetcode-cn.com/problems/design-circular-queue/)
-```cpp
-此处为代码
-```
-- 此处为解析
-
-**队列和广度优先搜索**
-#### [200. 岛屿的个数](https://leetcode-cn.com/problems/number-of-islands/)
-```cpp
-此处为代码
-```
-- 此处为解析
-
-
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
