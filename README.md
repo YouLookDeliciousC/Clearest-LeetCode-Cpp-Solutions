@@ -1,12 +1,27 @@
 # :cat2: Clearest-LeetCode-Cpp-Solutions
-Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas
+Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas. 我们追求的目标：清晰简单的思路 + 畅快巧妙的代码
 
 # 前言
 - 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用、简单有效的解题方法，理解并记忆一些避免代码冗余的黑科技模块。
 - 项目持续更新中，优先使用 C++，不支持的题目使用 C 代替，如果您有希望分享的清晰解法欢迎联系更新~ [直接发issue 或 fork，记得留下署名和联系方式 :bear:] 鉴于追求的主题，本项目收录题解需满足：1.思路简单清晰，容易理解 2.代码轻巧，不冗余 3.执行效率较高，时间复杂度低
+- 水平有限，若您发现已存在的代码中如有冗余部分，欢迎 issue 或 PR。
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，带您体验 python 中各种让人叹为观止的奇巧解法，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 
-# 解析
+# [专题探索](https://leetcode-cn.com/explore/)
+![](思维导图.jpg)
+
+以上是一张互联网公司面试中经常考察的问题类型总结的思维导图，此栏目将根据 LeetCode 中文版探索板块给出的路线制作题解，目标追求思路的常规性，代码的高可读性，各专栏将尽力覆盖各大知识要点。
+## 数据结构，说难也不难
+### [队列 & 栈](https://leetcode-cn.com/explore/learn/card/queue-stack/)
+#### 队列：先入先出的数据结构
+##### [622. 设计循环队列](https://leetcode-cn.com/problems/design-circular-queue/)
+```cpp
+此处为代码
+```
+- 此处为解析
+#### 队列和广度优先搜索
+##### [200. 岛屿的个数](https://leetcode-cn.com/problems/number-of-islands/)
+# 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
 ### [238. Product of Array Except Self 双指针](https://leetcode.com/problems/product-of-array-except-self/)
