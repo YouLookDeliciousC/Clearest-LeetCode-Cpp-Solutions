@@ -12,8 +12,8 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 
 以上是一张互联网公司面试中经常考察的问题类型总结的思维导图，此栏目将根据 LeetCode 中文版探索板块给出的路线制作题解，目标追求思路的常规性，代码的高可读性，各专栏将尽力覆盖各大知识要点。
 ## 数据结构，说难也不难
-1. [队列 & 栈](https://leetcode-cn.com/explore/learn/card/queue-stack/)
-### 队列：先入先出的数据结构
+### [队列 & 栈](https://leetcode-cn.com/explore/learn/card/queue-stack/)
+- 队列：先入先出的数据结构
 #### [622. 设计循环队列](https://leetcode-cn.com/problems/design-circular-queue/)
 ```cpp
 此处为代码
