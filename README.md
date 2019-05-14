@@ -1,12 +1,54 @@
 # :cat2: Clearest-LeetCode-Cpp-Solutions
-Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas
+Clearest LeetCode C++ Solutions. This project is intended to clarify the problem solving ideas. 我们追求的目标：清晰简单的思路 + 畅快巧妙的代码
 
 # 前言
 - 本项目意在收集 leetcode 中各大题型最清晰的解题思路 😉，帮助短时间内捋顺 C++ 编程知识体系、掌握常规通用、简单有效的解题方法，理解并记忆一些避免代码冗余的黑科技模块。
 - 项目持续更新中，优先使用 C++，不支持的题目使用 C 代替，如果您有希望分享的清晰解法欢迎联系更新~ [直接发issue 或 fork，记得留下署名和联系方式 :bear:] 鉴于追求的主题，本项目收录题解需满足：1.思路简单清晰，容易理解 2.代码轻巧，不冗余 3.执行效率较高，时间复杂度低
+- 水平有限，若您发现已存在的代码中如有冗余部分，欢迎 issue 或 PR。
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，带您体验 python 中各种让人叹为观止的奇巧解法，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
+- 欢迎加入QQ交流群：902025048 [∷二维码](QR.png) 群内提供更多相关资料~
+# 专题探索
+![](思维导图.jpg)
 
-# 解析
+以上是一张互联网公司面试中经常考察的问题类型总结的思维导图，此栏目将根据 LeetCode 中文版探索板块给出的路线制作题解，各专栏将尽力覆盖各大知识要点并总结知识点和套路。相比于[题库解析](#题库解析)部分追求代码的绝对精简，本专题追求以**高可读性**呈现各大专题的**常规思路**，为后续的题库解析部分做铺垫。俩部分题目可能重复，但专题部分会有更详细的解析，且可能运用不同解法。
+
+## 数据结构，说难也不难
+### [队列 & 栈](https://leetcode-cn.com/explore/learn/card/queue-stack/)
+- :black_joker:【知识卡片】**队列**中的数据呈线性排列，就和“队列”这个名字一样，把它想象成排成一 队的人更容易理解。在队列中，处理总是从第一名开始往后进行，而新来的人只能排在队尾。像队列这种最先进去的数据最先被取来，即“先进先出”的结构，我们称为 First In First Out，简称 FIFO
+- :black_joker:【知识卡片】**栈**也是一种数据呈线性排列的数据结构，不过在这种结构中，我们只能访问最新添加的数 据。栈就像是一摞书，拿到新书时我们会把它放在书堆的最上面，取书时也只能从最上面的新书开始取。Last In First Out，简称 LIFO
+- :black_joker:【知识卡片】**广度优先搜索（BFS）**是一种对图进行搜索的算法。假设我们一开始位于某个顶点（即起点），此 时并不知道图的整体结构，而我们的目的是从起点开始顺着边搜索，直到到达指定顶点（即终 点）。在此过程中每走到一个顶点，就会判断一次它是否为终点。广度优先搜索会优先从离起点近的顶点开始搜索，这样由近及广的搜索方式也使得。根据 BFS 的特性，其常常被用于 `遍历` 和 `搜索最短路径`
+- tophat:【套路】**广度优先搜索一般流程**
+	```
+    # 1.使用 queue.Queue 初始化队列
+    # 2.选择合适的根节点压入队列
+
+    # 3.使用 wile 进入队列循环，直到搜索完毕
+    # {
+    #   4.取出一个节点
+    #   5.放入这个节点周围的节点
+    # }
+	```
+
+**队列：先入先出的数据结构**
+#### [622. 设计循环队列](https://leetcode-cn.com/problems/design-circular-queue/)
+```cpp
+代码
+```
+- 解析
+
+**队列和广度优先搜索**
+#### [200. 岛屿的个数](https://leetcode-cn.com/problems/number-of-islands/)
+```cpp
+代码
+```
+- 解析
+
+#### [752. 打开转盘锁](https://leetcode-cn.com/problems/open-the-lock/submissions/)
+```cpp
+代码
+```
+- 解析
+# 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
 ### [238. Product of Array Except Self 双指针](https://leetcode.com/problems/product-of-array-except-self/)
@@ -236,7 +278,7 @@ public:
     }
 };
 ```
-## 先入先出的数据结构（FIFO）
+## 队列
 ### [933. Number of Recent Calls 队列](https://leetcode-cn.com/problems/number-of-recent-calls/)
 ```cpp
 class RecentCounter {
@@ -258,4 +300,5 @@ public:
 - 返回队列中剩余元素的个数
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
-- [Knife丶](https://github.com/cy69855522)[QQ1272068154  微信ly18597591102]
+- [Knife丶](https://github.com/cy69855522) [QQ1272068154  微信ly18597591102]
+- [YouLookDeliciousC](https://github.com/YouLookDeliciousC) [QQ210021997]
