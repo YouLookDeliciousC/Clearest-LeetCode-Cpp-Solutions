@@ -238,6 +238,26 @@ public:
     }
 };
 ```
+## 先入先出的数据结构（FIFO）
+### [933. Number of Recent Calls 队列](https://leetcode-cn.com/problems/number-of-recent-calls/)
+```cpp
+class RecentCounter {
+    queue<int> tco;
+public:
+    RecentCounter() { 
+    }
+    int ping(int t) {
+        while(!tco.empty() && tco.front() <t- 3000)
+        {
+            tco.pop();
+        }
+        tco.push(t);
+        return tco.size();
+    }
+};
+```
+- 因为t的值会逐渐增大，只需要判断队列首位是否小于t-3000.
+- 返回队列中剩余元素的个数
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522)[QQ1272068154  微信ly18597591102]
