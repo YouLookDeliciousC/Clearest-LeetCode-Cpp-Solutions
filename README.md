@@ -238,7 +238,8 @@ public:
     }
 };
 ```
-## 先入先出的数据结构（FIFO）
+数据结构
+## 队列
 ### [933. Number of Recent Calls 队列](https://leetcode-cn.com/problems/number-of-recent-calls/)
 ```cpp
 class RecentCounter {
