@@ -238,7 +238,7 @@ public:
     }
 };
 ```
-数据结构
+# 数据结构
 ## 队列
 ### [933. Number of Recent Calls 队列](https://leetcode-cn.com/problems/number-of-recent-calls/)
 ```cpp
