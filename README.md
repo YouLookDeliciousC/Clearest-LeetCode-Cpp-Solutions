@@ -43,7 +43,7 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 ```
 - 解析
 
-#### [752. 打开转盘锁  广度优先搜索+剪枝](https://leetcode-cn.com/problems/open-the-lock/submissions/)
+#### [752. 打开转盘锁  队列+广度优先搜索+剪枝](https://leetcode-cn.com/problems/open-the-lock/submissions/)
 ```cpp
 class Solution {
 public:
