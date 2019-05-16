@@ -48,59 +48,49 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 class Solution {
 public:
     int openLock(vector<string>& deadends, string target) {
-        string beginstr="0000";
-        set<string> dead(deadends.begin(),deadends.end());//收录死锁的数据
+        string beginstr = "0000";
+        set<string> dead(deadends.begin(),deadends.end()); //收录死锁的数据
         set<string> done; //用来记录已经遍历过的数字
-        
-        char flag1 ='9'+1;  //处理9->0
-        char flag2 ='0'-1;  //处理0->9
-        
         done.insert(beginstr);
-        int minpath=INT_MAX;
-        queue<pair<int,string>>record;  //创建队列记录当前深度和节点
-        record.push({0,beginstr});
-        if(dead.count(beginstr))   return -1;   //如果死锁数据中包含起始数据，直接返回-1
         
-        while (!record.empty())   //用BSF遍历所有可能的数据
+        // BFS 从这里开始--------------------------------------------------------------
+        queue<pair<int,string>>record; //创建队列记录当前深度和节点
+        record.push({0,beginstr});
+        
+        if(dead.count(beginstr)) return -1; //如果死锁数据中包含起始数据，直接返回-1
+        
+        while(!record.empty()) //用BSF遍历所有可能的数据
         {
-            auto tmp = record.front();//提取队列中第一个数据
-            record.pop(); 
+            auto tmp = record.front(); //提取队列中第一个数据
+            record.pop();
             
-            if (tmp.second==target&&tmp.first<minpath ) //笔记*1  
-                minpath=tmp.first;
-            if (tmp.first>minpath) continue; //剪枝，本题能否AC的小关键
-            for(int i=0;i<4;i++)  //对提取出来的数据的每一位做+1和-1的操作
+            for(int i=0; i<4; i++) //对提取出来的数据的每一位做+1和-1的操作
             {
-                string spls=tmp.second;
-                string ssbs=tmp.second;
+                string spls = tmp.second;
+                string ssbs = tmp.second;
                 
-                spls[i] += 1;
-                ssbs[i] -= 1;
+                spls[i] = ((spls[i] - '0') + 1) % 10 + '0';
+                ssbs[i] = ((ssbs[i] - '0') + 10 - 1) % 10 + '0';
                 
-                if (spls[i]==flag1)   //处理9->0
-                    spls[i]='0';
-                    
-                if (ssbs[i]==flag2)   //处理0->9
-                    ssbs[i]='9';
-                    
-                if (!dead.count(spls)&&!done.count(spls)) //若加一后的数据不存在死锁集合中，且，不是之前遍历过的数据
-                {                                           //加到record队列中
-                    record.push({tmp.first+1,spls});
+                if(spls == target || ssbs == target) return tmp.first + 1;
+                
+                if(!dead.count(spls) && !done.count(spls)) //若加一后的数据不存在死锁集合中，且不是之前遍历过的数据
+                {
+                    record.push({tmp.first + 1, spls}); //加到record队列中
                     done.insert(spls);
                 }
-                if (!dead.count(ssbs)&&!done.count(ssbs))//若减一后的数据不存在死锁集合中，且，不是之前遍历过的数据
+                if(!dead.count(ssbs) && !done.count(ssbs)) //若减一后的数据不存在死锁集合中，且，不是之前遍历过的数据
                 {
-                    record.push({tmp.first+1,ssbs});     // 加到record队列中
+                    record.push({tmp.first + 1,ssbs}); // 加到record队列中
                     done.insert(ssbs);
                 }
             }
- 
         }
-
-        return minpath==INT_MAX? -1:minpath;   //笔记*2
+        return -1;
     }
 };
 ```
+- 解析等待修改 ↓
 - 本题通过使用BFS和剪枝解决，将问题转化为一个图，每一个点都与其它八个点相连接e.g. 0000 与0001，0009，0010，0090，0100，0900，1000，9000八个点相连，通过对每一个点的每一位数进行+1和-1的操作获得新的点，判断新的点是否在死锁集合内
 - 个人认为本题解法需添加剪枝操作，否则虽能得出正确答案，但时间会超出限制导致无法AC
 - 若不设置集合储存遍历过的点，会产生无限循环。
