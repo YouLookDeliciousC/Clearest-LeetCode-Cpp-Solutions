@@ -100,6 +100,9 @@ public:
         return minpath== INT_MAX?-1 :minpath;
     }
 };
+#### [752. 打开转盘锁](https://leetcode-cn.com/problems/open-the-lock/submissions/)
+```cpp
+代码
 ```
 - 解析
 # 题库解析
