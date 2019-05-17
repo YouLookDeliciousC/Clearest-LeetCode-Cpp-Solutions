@@ -22,7 +22,7 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
     # 1.使用 queue.Queue 初始化队列
     # 2.选择合适的根节点压入队列
 
-    # 3.使用 wile 进入队列循环，直到搜索完毕
+    # 3.使用 while 进入队列循环，直到搜索完毕
     # {
     #   4.取出一个节点
     #   5.放入这个节点周围的节点
@@ -43,7 +43,7 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 ```
 - 解析
 
-#### [752. 打开转盘锁  队列+广度优先搜索+剪枝](https://leetcode-cn.com/problems/open-the-lock/submissions/)
+#### [752. 打开转盘锁  队列+广度优先搜索](https://leetcode-cn.com/problems/open-the-lock/submissions/)
 ```cpp
 class Solution {
 public:
@@ -94,6 +94,35 @@ public:
 - 若不设置集合储存遍历过的点，会产生无限循环。
 - 本题使用mod和ASCII码来处理9->0和0->9的转换；也可设置两个flag1，flag2，当flag==‘9’+1或‘0’-1时，对答案进行重新赋值。
 - 可以通过first和second的调用来分别访问队列对中的数据； continue仅跳出一层循环一次。
+#### [279. 完全平方数  队列+广度优先搜索](https://leetcode.com/problems/perfect-squares/)
+```cpp
+class Solution {
+public:
+    int numSquares(int n) {
+        vector <int> val(n+1,-1);
+        val[0] = 0;
+        queue <int> que;
+        que.push(val[0]);
+        while(!que.empty())
+        {
+            int m = que.front();
+            que.pop();
+            for(int i = 1; i*i+m <= n; i++)
+            {
+                if(val[i*i+m] == -1)
+                {
+                    val[i*i+m] = val[m] + 1;
+                    que.push(i*i+m);
+                }
+            }
+        }
+        return val[n];
+    }
+};
+```
+- 解析  
+
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
