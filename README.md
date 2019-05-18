@@ -99,28 +99,32 @@ public:
 class Solution {
 public:
     int numSquares(int n) {
-        vector <int> val(n+1,-1);
-        val[0] = 0;
-        queue <int> que;
-        que.push(val[0]);
-        while(!que.empty())
+        vector <int> f (n+1,-1); //初始化 构造一个数组，容量为n+1，所有空间初始化为-1
+        f[0] = 0; //组成0的完全平方数的个数为0
+        
+        //BFS从这里开始-------------------------
+        queue <int> q; 构造一个队列储存nodes，等待处理
+        q.push(0);
+        while (!q.empty())
         {
-            int m = que.front();
-            que.pop();
-            for(int i = 1; i*i+m <= n; i++)
+            int m = q.front(); //取出第一个数据
+            q.pop();
+            for(int i = 1; i*i+m <=n; i++) //最小的完全平方数是1
             {
-                if(val[i*i+m] == -1)
+                if(f[i*i+m] == -1) //若i*i+m这个数字还没有出现过
                 {
-                    val[i*i+m] = val[m] + 1;
-                    que.push(i*i+m);
+                    f[i*i+m] = f[m] + 1; //加一次完全平方数，步骤加一
+                    q.push(i*i+m); //放入队列，接着搜索
                 }
             }
         }
-        return val[n];
+        return f[n];
     }
 };
 ```
-- 解析  
+- 本题使用队列+广度优先搜索来解决， 思维过程：以n=5为例，通过构建树形图形，root是0，通过第一次for循环，构建第一层node，此时m为0。如图
+- 图
+- 因为队列FIFO的性质，先达到目标的必是最少的个数
 
 
 # 题库解析
