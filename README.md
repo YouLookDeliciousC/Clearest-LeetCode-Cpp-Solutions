@@ -125,6 +125,42 @@ public:
 - 本题使用队列+广度优先搜索来解决， 思维过程：以n=5为例，通过构建树形图形，root是0，通过第一次for循环，构建第一层node，此时m为0。如图
 - 图
 - 因为队列FIFO的性质，先达到目标的必是最少的个数
+**栈：后入先出的数据结构**
+#### [155. Min Stack 栈](https://leetcode.com/problems/min-stack/)
+```cpp
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int>s; //主数据栈
+    stack<int>minn; //辅助数据栈
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        s.push(x);
+        if(minn.empty()||x<=minn.top()) //关键点，见总结
+            minn.push(x);
+    }
+    
+    void pop() {
+        if(s.top() == minn.top()) //判断数据栈的顶部是否是当前主数据栈的最小值，若是，需要将两个栈的top都pop掉
+            minn.pop();
+        s.pop();
+    }
+    
+    int top() {
+        return s.top(); //返回栈的顶部
+    }
+    
+    int getMin() {
+        return minn.top(); //返回最小值
+    }
+};
+```
+- 本题使用双栈，利用栈的后入先出的特性，将最小值推入minn栈，使minn栈的top始终为s栈的最小值。
+- 关键点：判断条件为当minn栈为空，或当前数据小于等于minn栈的top值。条件若为true，则将当前数据也push到minn栈中。若判断条件改为‘小于’minn栈的top值，而不是‘小于等于’minn栈的top值时，代码提交失败。问题在于，测试数据可能有大于1个的最小值，若s栈中的最小值个数多于1个，当minn栈和s栈的最小值被pop一个后，s栈中还有之前的最小值，而minn栈中的最小值变得比s栈中的最小值大，答案error。
+
 
 
 # 题库解析
