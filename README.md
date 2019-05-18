@@ -125,6 +125,7 @@ public:
 - 本题使用队列+广度优先搜索来解决， 思维过程：以n=5为例，通过构建树形图形，root是0，通过第一次for循环，构建第一层node，此时m为0。如图
 - 图
 - 因为队列FIFO的性质，先达到目标的必是最少的个数
+
 **栈：后入先出的数据结构**
 #### [155. Min Stack 栈](https://leetcode.com/problems/min-stack/)
 ```cpp
