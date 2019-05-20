@@ -161,9 +161,44 @@ public:
 ```
 - 本题使用双栈，利用栈的后入先出的特性，将最小值推入minn栈，使minn栈的top始终为s栈的最小值。
 - 关键点：判断条件为当minn栈为空，或当前数据小于等于minn栈的top值。条件若为true，则将当前数据也push到minn栈中。若判断条件改为‘小于’minn栈的top值，而不是‘小于等于’minn栈的top值时，代码提交失败。问题在于，测试数据可能有大于1个的最小值，若s栈中的最小值个数多于1个，当minn栈和s栈的最小值被pop一个后，s栈中还有之前的最小值，而minn栈中的最小值变得比s栈中的最小值大，答案error。
-
-
-
+#### [20. Valid parentheses 栈](https://leetcode.com/problems/valid-parentheses/)
+```cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        if(s.size() % 2 != 0) return false; //若字符串s的字符数不为偶数，直接返回false.  不过没有也可
+        stack <char> a; 
+        map <char,char> bra; //建立右括号和左括号之间的映射
+        bra.insert(pair<char,char>(')','('));
+        bra.insert(pair<char,char>(']','['));
+        bra.insert(pair<char,char>('}','{'));
+        int lo;
+        lo = s.size();
+        for(int i = 0; i < lo; i++)
+        {
+            if(s[i] == '(' || s[i] == '[' || s[i] == '{') //若是左括号，直接推入栈
+                a.push(s[i]);
+            if(s[i] == ')' || s[i] == ']' || s[i] == '}') //若是右括号，先判断栈内是否有左括号
+            {
+                if(a.empty()) //见总结*
+                    return false;
+                if(bra[s[i]] == a.top()) //若右括号与栈顶的左括号匹配，pop掉栈a最上方的左括号，否则返回false
+                {
+                    a.pop();
+                }
+                else
+                    return false;
+            }
+        }
+        if(a.empty()) //若操作之后，栈内还有字符，返回false
+            return true;
+        else
+            return false;
+    }
+};
+```
+- 有效的括号，通过建立左右括号之间的映射。使用栈后入先出的性质，压入左括号，若右括号和栈中顶部的左括号匹配，且最终栈内没有字符，返回true
+- 当操作右括号前，要判断栈是否为空，若缺少这一步，当栈内为空，右括号需要与空栈的top判断段是否相等的时候，会报错。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
@@ -449,6 +484,109 @@ private:
 ```
 - 本题用深度搜索算法来解答，当遭遇一座岛‘1’时，我们通过遍历这座岛每个部分（其它与这个点横竖相连的1）并将它们同化为‘0’，以防止这座岛被重复遍历
 - 这里有一个关键点，本题地图上的点‘1’，‘0’作为字符录入计算机，在计算机中这两个字符会被转化为ASCII码，‘1’的ASCII码比‘0’的数值多1（分别是49，48）。
+## 栈（stack）
+### [225. Implement Stack using Queues 用队列实现栈](https://leetcode.com/problems/implement-stack-using-queues/)
+```cpp
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    queue <int> q1;
+    queue <int> q2;
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) { //保证数据全部push到同一个队列
+       if(q1.empty())
+            q2.push(x);
+        else
+            q1.push(x);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        if(q1.empty())
+        {
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //将有数据的队列的数据除了最后一个以外，全部push到另一个队列。
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a=q2.front();
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a=q1.front();
+            q1.pop();
+            return a;
+            
+        }
+        
+    }
+    
+    /** Get the top element. */
+    int top() {
+        if(q1.empty())
+        {
+            //q2.size()
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a = q2.front();
+            q1.push(q2.front());
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len-1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a = q1.front();
+            q2.push(q1.front());
+            q1.pop();
+            return a;
+            
+        }
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty() && q2.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+```
+- push： 两种数据结构的push方法相同，都是在数据的后面压入数据。
+- pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
+- top： 操作位置与pop类似，只是只返回值，不删除数据。 
+- 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522) [QQ1272068154  微信ly18597591102]
