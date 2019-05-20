@@ -199,6 +199,29 @@ public:
 ```
 - 有效的括号，通过建立左右括号之间的映射。使用栈后入先出的性质，压入左括号，若右括号和栈中顶部的左括号匹配，且最终栈内没有字符，返回true
 - 当操作右括号前，要判断栈是否为空，若缺少这一步，当栈内为空，右括号需要与空栈的top判断段是否相等的时候，会报错。
+### [739. Daily Temperatures栈](https://leetcode.com/problems/daily-temperatures/)
+```cpp
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& T) {
+        vector <int> ans (T.size(), 0); //创建与气温天数相同的数组，收录答案
+        stack <int> res; 
+        for(int i = T.size()-1; i >= 0; --i) //从最后一天开始往前
+        {
+            while(!res.empty() && T[i] >= T[res.top()]) res.pop(); //若当前数据大于等于栈顶数据，pop掉栈顶数据直到栈为空或当前数据小于栈顶数据
+            if(res.empty())
+                ans[i] = 0;
+            else
+                ans[i] = res.top() - i;
+            res.push(i); //栈顶始终是整个栈的最小数据
+        }
+        return ans;
+    }
+};
+```
+- 创建一个递减栈 后入栈的元素总比先入栈的元素小。
+- 若当前数据比栈top数据小， 则入栈；若当前数据比栈top大，先pop栈，直到当前数据比栈的top数据小，再入栈。
+- 索引相减
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
