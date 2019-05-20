@@ -484,6 +484,109 @@ private:
 ```
 - 本题用深度搜索算法来解答，当遭遇一座岛‘1’时，我们通过遍历这座岛每个部分（其它与这个点横竖相连的1）并将它们同化为‘0’，以防止这座岛被重复遍历
 - 这里有一个关键点，本题地图上的点‘1’，‘0’作为字符录入计算机，在计算机中这两个字符会被转化为ASCII码，‘1’的ASCII码比‘0’的数值多1（分别是49，48）。
+## 栈（stack）
+### [225. Implement Stack using Queues 用队列实现栈](https://leetcode.com/problems/implement-stack-using-queues/)
+```cpp
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    queue <int> q1;
+    queue <int> q2;
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) { //保证数据全部push到同一个队列
+       if(q1.empty())
+            q2.push(x);
+        else
+            q1.push(x);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        if(q1.empty())
+        {
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //将有数据的队列的数据除了最后一个以外，全部push到另一个队列。
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a=q2.front();
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a=q1.front();
+            q1.pop();
+            return a;
+            
+        }
+        
+    }
+    
+    /** Get the top element. */
+    int top() {
+        if(q1.empty())
+        {
+            //q2.size()
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a = q2.front();
+            q1.push(q2.front());
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len-1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a = q1.front();
+            q2.push(q1.front());
+            q1.pop();
+            return a;
+            
+        }
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty() && q2.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+```
+- push： 两种数据结构的push方法相同，都是在数据的后面压入数据。
+- pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
+- top： 操作位置与pop类似，只是只返回值，不删除数据。 
+- 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522) [QQ1272068154  微信ly18597591102]
