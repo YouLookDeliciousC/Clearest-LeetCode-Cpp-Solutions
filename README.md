@@ -39,9 +39,83 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 **队列和广度优先搜索**
 #### [200. 岛屿的个数](https://leetcode-cn.com/problems/number-of-islands/)
 ```cpp
-代码
+class Solution {
+public:
+    bool inGrid(vector<vector<char>>& grid, pair <int,int> a) //判断点是否超出边界
+    {
+        if(a.first >= 0 && a.first < grid.size() && a.second >= 0 && a.second < grid[0].size())
+            return true;
+        else 
+            return false;
+    }
+    
+/*    void BFS(vector<vector<char>>& grid, queue<pair<int,int>>& po) //BFS的过程
+    {
+        if(po.empty()) return;
+        pair <int,int> temp = po.front();
+        po.pop();
+        grid[temp.first][temp.second] = '0';
+        pair <int,int> up = {temp.first + 1, temp.second}; 
+        pair <int,int> down = {temp.first - 1, temp.second};
+        pair <int,int> left = {temp.first, temp.second - 1};
+        pair <int,int> right = {temp.first, temp.second + 1};
+        if(inGrid(grid,up) && grid[temp.first + 1][temp.second] == '1') //若拓展出去的点仍在边界之内，且是岛屿的一部分，将其push入队列内，作为之后迭代的起始点
+            po.push(up);
+        if(inGrid(grid,down) && grid[temp.first - 1][temp.second] == '1')
+            po.push(down);
+        if(inGrid(grid,left) && grid[temp.first][temp.second - 1] == '1')
+            po.push(left);
+        if(inGrid(grid,right) && grid[temp.first][temp.second + 1] == '1')
+            po.push(right);
+        return BFS(grid,po);
+    }
+    */
+    int numIslands(vector<vector<char>>& grid) {
+        int ans = 0;
+        queue <pair<int,int>> po;
+        if(grid.empty()) return 0; //若地图为空，直接返回0
+        int m = grid.size();
+        int n = grid[0].size();
+        for(int y = 0; y < m; ++y) //遍历整张地图的每个点
+        {
+            for(int x = 0; x <n; ++x)
+            {
+                if(grid[y][x] == '1') //若bool值为true，该点为新发现的岛屿的起始点
+                {
+                    po.push({y,x});
+                    //BFS(grid,po);
+                    ++ans; //岛屿数加一
+                    while(!po.empty()) //进入广度优先搜索
+                    {
+                        
+                        pair <int,int> temp = po.front();
+                        po.pop();
+                        if(grid[temp.first][temp.second] == '0')
+                            continue;
+                        grid[temp.first][temp.second] = '0';
+                        pair <int,int> up = {temp.first + 1, temp.second}; 
+                        pair <int,int> down = {temp.first - 1, temp.second};
+                        pair <int,int> left = {temp.first, temp.second - 1};
+                        pair <int,int> right = {temp.first, temp.second + 1};
+                        if(inGrid(grid,up) && grid[temp.first + 1][temp.second] == '1') //若拓展出去的点仍在边界之内，且是岛屿的一部分，将其push入队列内，作为之后迭代的起始点
+                            po.push(up);
+                        if(inGrid(grid,down) && grid[temp.first - 1][temp.second] == '1')
+                            po.push(down);
+                        if(inGrid(grid,left) && grid[temp.first][temp.second - 1] == '1')
+                            po.push(left);
+                        if(inGrid(grid,right) && grid[temp.first][temp.second + 1] == '1')
+                            po.push(right);
+                    }
+                    
+                }
+            }
+        }
+        return ans;
+    }
+};
 ```
-- 解析
+- 这里用queue来实现BFS来解决这道题。使用了queue先入先出的性质
+- 想象：先搜索到一个岛屿的某点，先遍历该点的四周，将‘1’转化为0，进入下一个候补点，再遍历四周……以此类推直到遍历完整座岛屿（‘1’）
 
 #### [752. 打开转盘锁  队列+广度优先搜索](https://leetcode-cn.com/problems/open-the-lock/submissions/)
 ```cpp
@@ -290,6 +364,66 @@ public:
 - 本题使用栈后入先出的性质，当遇到算术运算符时，pop出最近进入栈内的两个数字进行运算。运算后需要将结果push回栈内进行下一次运算。
 - 当遇到的不是算术运算符时，那就是数字了。直接push到栈中等待运算。
 - 注意：本题的初始数据是string类型，需要将其转换成int类型。
+**栈和深度优先搜索**
+### [200. Number of Islands](https://leetcode.com/problems/number-of-islands/)
+```cpp
+class Solution {
+public:
+    bool inGrid(vector<vector<char>>& grid, pair <int,int> a) //判断点是否超出边界
+    {
+        if(a.first >= 0 && a.first < grid.size() && a.second >= 0 && a.second < grid[0].size())
+            return true;
+        else 
+            return false;
+    }
+    
+    void DFS(vector<vector<char>>& grid, stack<pair<int,int>>& po) //DFS的过程
+    {
+        if(po.empty()) return;
+        pair <int,int> temp = po.top();
+        po.pop();
+        grid[temp.first][temp.second] = '0';
+        pair <int,int> up = {temp.first + 1, temp.second}; 
+        pair <int,int> down = {temp.first - 1, temp.second};
+        pair <int,int> left = {temp.first, temp.second - 1};
+        pair <int,int> right = {temp.first, temp.second + 1};
+        if(inGrid(grid,up) && grid[temp.first + 1][temp.second] == '1') //若拓展出去的点仍在边界之内，且是岛屿的一部分，将其push入栈内，作为之后迭代的起始点
+            po.push(up);
+        if(inGrid(grid,down) && grid[temp.first - 1][temp.second] == '1')
+            po.push(down);
+        if(inGrid(grid,left) && grid[temp.first][temp.second - 1] == '1')
+            po.push(left);
+        if(inGrid(grid,right) && grid[temp.first][temp.second + 1] == '1')
+            po.push(right);
+        return DFS(grid,po);
+    }
+    
+    int numIslands(vector<vector<char>>& grid) {
+        int ans = 0;
+        stack <pair<int,int>> po;
+        if(grid.empty()) return 0; //若地图为空，直接返回0
+        int m = grid.size();
+        int n = grid[0].size();
+        for(int y = 0; y < m; ++y) //遍历整张地图的每个点
+        {
+            for(int x = 0; x <n; ++x)
+            {
+                if(grid[y][x] == '1') //若bool值为true，该点为新发现的岛屿的起始点
+                {
+                    po.push({y,x});
+                    DFS(grid,po); //进入深度优先搜索
+                    ++ans; //岛屿数加一
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+- 这里用stack 和DFS数据结构来做这道题，stack 后入先出的数据类型，DFS：选择最新的数据作为候补顶点。
+- 首先，开始先遍历地图，直到遇到第一个‘1’（岛屿），以它为root开始通过DFS搜索这座岛屿的其它部分，并把他们全部转化为‘0’，同时把岛屿数量+1。之后接着遍历地图，由于我们将搜索过的岛屿转化为‘0’，因此不会重复搜索。
+- 测试用例有空集，因此需要在搜索开始前判断地图是否为空，若为空直接返回0。
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
