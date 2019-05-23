@@ -364,8 +364,9 @@ public:
 - 本题使用栈后入先出的性质，当遇到算术运算符时，pop出最近进入栈内的两个数字进行运算。运算后需要将结果push回栈内进行下一次运算。
 - 当遇到的不是算术运算符时，那就是数字了。直接push到栈中等待运算。
 - 注意：本题的初始数据是string类型，需要将其转换成int类型。
+
 **栈和深度优先搜索**
-### [200. Number of Islands](https://leetcode.com/problems/number-of-islands/)
+### [200. Number of Islands栈+DFS](https://leetcode.com/problems/number-of-islands/)
 ```cpp
 class Solution {
 public:
