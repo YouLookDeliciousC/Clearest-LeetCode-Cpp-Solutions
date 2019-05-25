@@ -449,6 +449,23 @@ public:
 ```
 - 本题使用DFS来实现，通过计数器counter来记录深度，不断迭代直到遍历完数组内的全部数据。
 - 记下符合目标的支路。
+### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+```cpp
+class Solution {
+public:
+    vector <int> rest;
+    vector<int> inorderTraversal(TreeNode* root) {
+        if(root != NULL)
+        {
+            inorderTraversal(root -> left);
+            rest.push_back(root -> val);
+            inorderTraversal(root -> right);
+        }
+        return rest;
+    }
+};
+```
+- 考察到一个节点后，将其暂存，遍历完左子树后，再输出该节点的值，然后遍历右子树。(左根右)
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
