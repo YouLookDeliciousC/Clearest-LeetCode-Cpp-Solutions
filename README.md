@@ -424,7 +424,31 @@ public:
 - 这里用stack 和DFS数据结构来做这道题，stack 后入先出的数据类型，DFS：选择最新的数据作为候补顶点。
 - 首先，开始先遍历地图，直到遇到第一个‘1’（岛屿），以它为root开始通过DFS搜索这座岛屿的其它部分，并把他们全部转化为‘0’，同时把岛屿数量+1。之后接着遍历地图，由于我们将搜索过的岛屿转化为‘0’，因此不会重复搜索。
 - 测试用例有空集，因此需要在搜索开始前判断地图是否为空，若为空直接返回0。
-
+### [494. Target Sum  DFS](https://leetcode.com/problems/target-sum/)
+```cpp
+class Solution {
+public:
+    void DFS(vector<int>& nums, int S, int& count, int counter, int sum) //DFS函数
+    {
+        if(counter == nums.size())
+        {
+            if(sum == S)
+                ++ count;
+            return;
+        }
+        DFS(nums, S, count, counter + 1, sum + nums[counter]);
+        DFS(nums, S, count, counter + 1, sum -  nums[counter]);
+    }
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int count = 0;
+        int sum = 0;
+        DFS(nums, S, count, 0, sum);
+        return count;
+    }
+};
+```
+- 本题使用DFS来实现，通过计数器counter来记录深度，不断迭代直到遍历完数组内的全部数据。
+- 记下符合目标的支路。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
@@ -813,6 +837,29 @@ public:
 - pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
 - top： 操作位置与pop类似，只是只返回值，不删除数据。 
 - 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
+## 暴力破解
+### [1. Two Sum](https://leetcode.com/problems/two-sum/)
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int len = nums.size();
+        int i,j;
+        for(i = 0; i < len; ++i)
+        {
+            for(j = i+1; j < len; ++j)
+            {
+                int plus = nums[i] + nums[j];
+                if(plus == target)
+                    return {i,j};
+            }
+        }
+        return{};
+    }
+};
+```
+- 暴力破解，注意：你不能重复利用这个数组中同样的元素。
+- 其次，若没有答案，需要返回空的数组。
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522) [QQ1272068154  微信ly18597591102]
