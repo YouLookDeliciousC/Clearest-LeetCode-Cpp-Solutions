@@ -428,21 +428,18 @@ public:
 ```cpp
 class Solution {
 public:
-    void DFS(vector<int>& nums, int S, int& count, int k, int sum)
+    void DFS(vector<int>& nums, int S, int& count, int counter, int sum) //DFS函数
     {
-        if(k == nums.size())
+        if(counter == nums.size())
         {
             if(sum == S)
-            {
-                count ++;
-            }
+                ++ count;
             return;
         }
-        DFS(nums, S, count, k + 1, sum+nums[k]);
-        DFS(nums, S, count, k + 1, sum-nums[k]);
+        DFS(nums, S, count, counter + 1, sum + nums[counter]);
+        DFS(nums, S, count, counter + 1, sum -  nums[counter]);
     }
-    int findTargetSumWays(vector<int>& nums, int S) 
-    {
+    int findTargetSumWays(vector<int>& nums, int S) {
         int count = 0;
         int sum = 0;
         DFS(nums, S, count, 0, sum);
@@ -450,7 +447,8 @@ public:
     }
 };
 ```
-- 解析
+- 本题使用DFS来实现，通过计数器counter来记录深度，不断迭代直到遍历完数组内的全部数据。
+- 记下符合目标的支路。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
