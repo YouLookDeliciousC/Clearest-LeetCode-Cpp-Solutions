@@ -839,6 +839,29 @@ public:
 - pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
 - top： 操作位置与pop类似，只是只返回值，不删除数据。 
 - 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
+## 暴力破解
+### [1. Two Sum](https://leetcode.com/problems/two-sum/)
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int len = nums.size();
+        int i,j;
+        for(i = 0; i < len; ++i)
+        {
+            for(j = i+1; j < len; ++j)
+            {
+                int plus = nums[i] + nums[j];
+                if(plus == target)
+                    return {i,j};
+            }
+        }
+        return{};
+    }
+};
+```
+- 暴力破解，注意：你不能重复利用这个数组中同样的元素。
+- 其次，若没有答案，需要返回空的数组。
 # 解法汇总贡献者
 注：此处贡献名单仅代表汇总搜集贡献，不代表全部原创，欢迎所有更短的解法🤓
 - [Knife丶](https://github.com/cy69855522) [QQ1272068154  微信ly18597591102]
