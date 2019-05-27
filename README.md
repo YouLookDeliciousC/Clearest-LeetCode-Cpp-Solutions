@@ -622,6 +622,50 @@ public:
 - pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
 - top： 操作位置与pop类似，只是只返回值，不删除数据。 
 - 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
+### [394. Decode String 栈](https://leetcode.com/problems/decode-string/)
+```cpp
+class Solution {
+public:
+    string decodeString(string s) {
+        string res = "";
+        stack <int> nums;
+        stack <string> strs;
+        int num = 0;
+        int len = s.size();
+        for(int i = 0; i < len; ++ i)
+        {
+            if(s[i] >= '0' && s[i] <= '9')
+            {
+                num = num * 10 + s[i] - '0';
+            }
+            else if((s[i] >= 'a' && s[i] <= 'z') ||(s[i] >= 'A' && s[i] <= 'Z'))
+            {
+                res = res + s[i];
+            }
+            else if(s[i] == '[') //将‘[’前的数字压入nums栈内， 字母字符串压入strs栈内
+            {
+                nums.push(num);
+                num = 0;
+                strs.push(res); 
+                res = "";
+            }
+            else //遇到‘]’时，操作与之相配的‘[’之间的字符，使用分配律
+            {
+                int times = nums.top();
+                nums.pop();
+                for(int j = 0; j < times; ++ j)
+                    strs.top() += res;
+                res = strs.top(); //之后若还是字母，就会直接加到res之后，因为它们是同一级的运算
+                                  //若是左括号，res会被压入strs栈，作为上一层的运算
+                strs.pop();
+            }
+        }
+        return res;
+    }
+};
+```
+- 这题看到括号的匹配，首先应该想到的就是用栈来解决问题。
+- 其次，读完题目，要我们类似于制作一个能使用分配律的计算器。想象：如3[a2[c]b] 使用一次分配律-> 3[accb] 再使用一次分配律->accbaccbaccb
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
