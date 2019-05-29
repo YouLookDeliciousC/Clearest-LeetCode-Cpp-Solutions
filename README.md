@@ -697,6 +697,45 @@ public:
 - 本题的目的是在图像中，用新的色块代替旧的色块，图像中或许有一个以上相同颜色的色块，但是只改变输入希望改变的其中一个色块。
 - 这题类似于 [岛屿的数量](https://leetcode.com/problems/number-of-islands/) 。差别在于，岛屿的数量要将图中的所有点全部遍历一遍，而本题只需要遍历目标点所在的色块。
 - 由于其中一个测试用例的新旧颜色相同，所以需要剪枝，若新旧颜色相同，直接返回原图像。
+### [542. 01 矩阵 BFS](https://leetcode.com/problems/01-matrix/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        queue <pair<int,int>> q;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector <pair<int,int>> around = {{0,1},{0,-1},{-1,0},{1,0}}; //周围节点
+        for(int i = 0; i < m; ++i)
+        {
+            for(int j = 0; j < n; ++j)
+            {
+                if(matrix[i][j] == 0) q.push({i,j}); //将元素为0 的点推入队列
+                else matrix[i][j] = INT_MAX;
+            }
+        }
+        while(!q.empty())
+        {
+            pair <int,int> temp = q.front(); 
+            q.pop();
+            for(int b = 0; b < 4; ++ b) //探索周围节点
+            {
+                int y = temp.first + around[b].first;
+                int x = temp.second + around[b].second;
+                //判断在图内，且新点的元素大于该点元素。
+                if(0 <= x && x < n && 0 <= y && y < m && matrix[temp.first][temp.second] < matrix[y][x])
+                {
+                    matrix[y][x] = matrix[temp.first][temp.second] + 1;
+                    q.push({y,x});
+                }
+            }
+        }
+        return matrix;
+    }
+};
+```
+- 本题求最短路径，首先应该想到使用BFS，然后是与之相配的queue数据结构。
+- 以所有的0为起点遍历矩阵，离0越远的点，元素值逐渐增加。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
