@@ -466,6 +466,276 @@ public:
 };
 ```
 - 考察到一个节点后，将其暂存，遍历完左子树后，再输出该节点的值，然后遍历右子树。(左根右)
+### [232. Implement Queue using Stacks 用双栈实现队列](https://leetcode.com/problems/implement-queue-using-stacks/)
+```cpp
+class MyQueue {
+public:
+    /** Initialize your data structure here. */
+    stack <int> a;
+    stack <int> b;
+    MyQueue() {
+        
+    }
+    
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        a.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int len;
+        len = a.size();
+        for(int i = 0; i < len; ++i)
+        {
+            b.push(a.top());
+            a.pop();
+        }
+        int cur;
+        cur = b.top();
+        b.pop();
+        for(int j = 0; j < len - 1; ++j)
+        {
+            a.push(b.top());
+            b.pop();
+        }
+        return cur;
+    }
+    
+    /** Get the front element. */
+    int peek() {
+        int len;
+        len = a.size();
+        for(int i = 0; i < len; ++i)
+        {
+            b.push(a.top());
+            a.pop();
+        }
+        int cur;
+        cur = b.top();
+        for(int j = 0; j < len; ++j)
+        {
+            a.push(b.top());
+            b.pop();
+        }
+        return cur;
+    }
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return a.empty() && b.empty();
+    }
+};
+```
+- 使用双栈的原因：能通过b栈将原a栈的数据倒置，此时栈的top，也就是队列的peek。可以实现队列的peek和pop操作。操作完再把b栈转换回a栈，这样当再push数据进栈的时候顺序才会正确。
+### [225. Implement Stack using Queues 用队列实现栈](https://leetcode.com/problems/implement-stack-using-queues/)
+```cpp
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    queue <int> q1;
+    queue <int> q2;
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) { //保证数据全部push到同一个队列
+       if(q1.empty())
+            q2.push(x);
+        else
+            q1.push(x);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        if(q1.empty())
+        {
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //将有数据的队列的数据除了最后一个以外，全部push到另一个队列。
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a=q2.front();
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a=q1.front();
+            q1.pop();
+            return a;
+            
+        }
+        
+    }
+    
+    /** Get the top element. */
+    int top() {
+        if(q1.empty())
+        {
+            //q2.size()
+            int len = q2.size();
+            for(int i = 0; i<len - 1; ++i) //同上
+            {
+                q1.push(q2.front());
+                q2.pop();
+            }
+            int a = q2.front();
+            q1.push(q2.front());
+            q2.pop();
+            return a;
+            
+        }
+        else
+        {
+            int len = q1.size();
+            for(int i = 0; i<len-1; ++i) //同上
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a = q1.front();
+            q2.push(q1.front());
+            q1.pop();
+            return a;
+            
+        }
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty() && q2.empty();
+    }
+};
+
+```
+- push： 两种数据结构的push方法相同，都是在数据的后面压入数据。
+- pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
+- top： 操作位置与pop类似，只是只返回值，不删除数据。 
+- 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
+### [394. Decode String 栈](https://leetcode.com/problems/decode-string/)
+```cpp
+class Solution {
+public:
+    string decodeString(string s) {
+        string res = "";
+        stack <int> nums;
+        stack <string> strs;
+        int num = 0;
+        int len = s.size();
+        for(int i = 0; i < len; ++ i)
+        {
+            if(s[i] >= '0' && s[i] <= '9')
+            {
+                num = num * 10 + s[i] - '0';
+            }
+            else if((s[i] >= 'a' && s[i] <= 'z') ||(s[i] >= 'A' && s[i] <= 'Z'))
+            {
+                res = res + s[i];
+            }
+            else if(s[i] == '[') //将‘[’前的数字压入nums栈内， 字母字符串压入strs栈内
+            {
+                nums.push(num);
+                num = 0;
+                strs.push(res); 
+                res = "";
+            }
+            else //遇到‘]’时，操作与之相配的‘[’之间的字符，使用分配律
+            {
+                int times = nums.top();
+                nums.pop();
+                for(int j = 0; j < times; ++ j)
+                    strs.top() += res;
+                res = strs.top(); //之后若还是字母，就会直接加到res之后，因为它们是同一级的运算
+                                  //若是左括号，res会被压入strs栈，作为上一层的运算
+                strs.pop();
+            }
+        }
+        return res;
+    }
+};
+```
+- 这题看到括号的匹配，首先应该想到的就是用栈来解决问题。
+- 其次，读完题目，要我们类似于制作一个能使用分配律的计算器。想象：如3[a2[c]b] 使用一次分配律-> 3[accb] 再使用一次分配律->accbaccbaccb
+### [733. Flood Fill 队列+BFS](https://leetcode.com/problems/flood-fill/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        queue <pair<int,int>> olds;
+        int old = image[sr][sc];
+        if(newColor == old) return image; //剪枝，若新颜色和旧色一样，直接返回原来的图像
+        olds.push({sr,sc});
+        //BFS由此开始--------------
+        while(!olds.empty()) 
+        {
+            pair<int,int> temp = olds.front();
+            olds.pop();
+            image[temp.first][temp.second] = newColor; //因为放入队列中的像素都是旧色像素，直接变成新色
+            vector<pair<int,int>> around = {{0,1},{0,-1},{-1,0},{1,0}}; //该像素四周的像素
+            for(int i = 0; i < 4; ++i) 
+            {
+                int y = temp.first + around[i].first;
+                int x = temp.second + around[i].second;
+                if(0 <= y && y < image.size() && 0 <= x && x < image[0].size() && image[y][x] == old) //若在图像内，且是旧色，则压入olds队列
+                    olds.push({y,x});
+            }
+        }
+        return image;
+    }
+};
+```
+- 本题的目的是在图像中，用新的色块代替旧的色块，图像中或许有一个以上相同颜色的色块，但是只改变输入希望改变的其中一个色块。
+- 这题类似于 [岛屿的数量](https://leetcode.com/problems/number-of-islands/) 。差别在于，岛屿的数量要将图中的所有点全部遍历一遍，而本题只需要遍历目标点所在的色块。
+- 由于其中一个测试用例的新旧颜色相同，所以需要剪枝，若新旧颜色相同，直接返回原图像。
+### [542. 01 矩阵 BFS](https://leetcode.com/problems/01-matrix/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        queue <pair<int,int>> q;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector <pair<int,int>> around = {{0,1},{0,-1},{-1,0},{1,0}}; //周围节点
+        for(int i = 0; i < m; ++i)
+        {
+            for(int j = 0; j < n; ++j)
+            {
+                if(matrix[i][j] == 0) q.push({i,j}); //将元素为0 的点推入队列
+                else matrix[i][j] = INT_MAX;
+            }
+        }
+        while(!q.empty())
+        {
+            pair <int,int> temp = q.front(); 
+            q.pop();
+            for(int b = 0; b < 4; ++ b) //探索周围节点
+            {
+                int y = temp.first + around[b].first;
+                int x = temp.second + around[b].second;
+                //判断在图内，且新点的元素大于该点元素。
+                if(0 <= x && x < n && 0 <= y && y < m && matrix[temp.first][temp.second] < matrix[y][x])
+                {
+                    matrix[y][x] = matrix[temp.first][temp.second] + 1;
+                    q.push({y,x});
+                }
+            }
+        }
+        return matrix;
+    }
+};
+```
+- 本题求最短路径，首先应该想到使用BFS，然后是与之相配的queue数据结构。
+- 以所有的0为起点遍历矩阵，离0越远的点，元素值逐渐增加。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
@@ -752,108 +1022,7 @@ private:
 - 本题用深度搜索算法来解答，当遭遇一座岛‘1’时，我们通过遍历这座岛每个部分（其它与这个点横竖相连的1）并将它们同化为‘0’，以防止这座岛被重复遍历
 - 这里有一个关键点，本题地图上的点‘1’，‘0’作为字符录入计算机，在计算机中这两个字符会被转化为ASCII码，‘1’的ASCII码比‘0’的数值多1（分别是49，48）。
 ## 栈（stack）
-### [225. Implement Stack using Queues 用队列实现栈](https://leetcode.com/problems/implement-stack-using-queues/)
-```cpp
-class MyStack {
-public:
-    /** Initialize your data structure here. */
-    queue <int> q1;
-    queue <int> q2;
-    MyStack() {
-        
-    }
-    
-    /** Push element x onto stack. */
-    void push(int x) { //保证数据全部push到同一个队列
-       if(q1.empty())
-            q2.push(x);
-        else
-            q1.push(x);
-    }
-    
-    /** Removes the element on top of the stack and returns that element. */
-    int pop() {
-        if(q1.empty())
-        {
-            int len = q2.size();
-            for(int i = 0; i<len - 1; ++i) //将有数据的队列的数据除了最后一个以外，全部push到另一个队列。
-            {
-                q1.push(q2.front());
-                q2.pop();
-            }
-            int a=q2.front();
-            q2.pop();
-            return a;
-            
-        }
-        else
-        {
-            int len = q1.size();
-            for(int i = 0; i<len - 1; ++i) //同上
-            {
-                q2.push(q1.front());
-                q1.pop();
-            }
-            int a=q1.front();
-            q1.pop();
-            return a;
-            
-        }
-        
-    }
-    
-    /** Get the top element. */
-    int top() {
-        if(q1.empty())
-        {
-            //q2.size()
-            int len = q2.size();
-            for(int i = 0; i<len - 1; ++i) //同上
-            {
-                q1.push(q2.front());
-                q2.pop();
-            }
-            int a = q2.front();
-            q1.push(q2.front());
-            q2.pop();
-            return a;
-            
-        }
-        else
-        {
-            int len = q1.size();
-            for(int i = 0; i<len-1; ++i) //同上
-            {
-                q2.push(q1.front());
-                q1.pop();
-            }
-            int a = q1.front();
-            q2.push(q1.front());
-            q1.pop();
-            return a;
-            
-        }
-    }
-    
-    /** Returns whether the stack is empty. */
-    bool empty() {
-        return q1.empty() && q2.empty();
-    }
-};
 
-/**
- * Your MyStack object will be instantiated and called as such:
- * MyStack* obj = new MyStack();
- * obj->push(x);
- * int param_2 = obj->pop();
- * int param_3 = obj->top();
- * bool param_4 = obj->empty();
- */
-```
-- push： 两种数据结构的push方法相同，都是在数据的后面压入数据。
-- pop： 队列的pop是从前面开始，即从数据的front部分； 而栈的pop从后面开始，即从数据的top部分
-- top： 操作位置与pop类似，只是只返回值，不删除数据。 
-- 由此可知，我们本题的关键是实现pop 和top的操作。我们通过两个队列的相互配合来实现栈。 例如，若a队列存有数据，将数据除了最后一项全部推入b队列，由于是先入先出，数据的顺序不变。a队列还剩下一个数据，当队列的数据仅剩一个时，该数据既是队列的第一个数据，也是队列的最后一个数据，通过pop（）和front（）函数的调用，可以产生相应的栈的pop（）和top（）的作用。
 ## 暴力破解
 ### [1. Two Sum](https://leetcode.com/problems/two-sum/)
 ```cpp
