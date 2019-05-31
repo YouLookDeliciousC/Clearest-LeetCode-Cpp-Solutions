@@ -736,7 +736,7 @@ public:
 ```
 - 本题求最短路径，首先应该想到使用BFS，然后是与之相配的queue数据结构。
 - 以所有的0为起点遍历矩阵，离0越远的点，元素值逐渐增加。
-###[841. 钥匙和房间](https://leetcode.com/problems/keys-and-rooms/)
+### [841. 钥匙和房间](https://leetcode.com/problems/keys-and-rooms/)
 ```cpp
 class Solution {
 public:
@@ -767,6 +767,7 @@ public:
 - 使用stack数据结构来实现DFS遍历所有能进入的房间，取到钥匙说明指向的房间能进入，直接放入visited。
 - 使用set visited来记录已经走过的房间，set内的元素不重复，且能查找某个元素是否存在于集合内。
 - 注意：房间从第0开始。
+
 **数组和字符串**
 
 # 题库解析
