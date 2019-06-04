@@ -935,7 +935,28 @@ public:
 ```
 - 这里的方法不需要记录已经走过的路径，所以执行用时和内存消耗都相对较小
 - |1. 首先设定上下左右边界 2. 其次向右移动到最右，此时第一行因为已经使用过了，可以将其从图中删去，体现在代码中就是重新定义上边界 3. 判断若重新定义后，上下边界交错，表明螺旋矩阵遍历结束，跳出循环，返回答案 4. 若上下边界不交错，则遍历还未结束，接着向下向左向上移动，操作过程与第一，二步同理 5. 不断循环以上步骤，直到某两条边界交错，跳出循环，返回答案|
-
+### [118. 杨辉三角](https://leetcode.com/problems/pascals-triangle/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans(numRows);
+        if(numRows == 0)    return ans; //若numRows为空，返回空数组
+        for(int i = 0; i < numRows; ++ i ) //给数组一个个赋值
+        {
+            for(int j = 0; j <= i; ++ j)
+            {
+                if(j == 0 || j == i) //若是左右两边的边界，赋值为1
+                    ans[i].push_back(1);
+                else
+                    ans[i].push_back(ans[i-1][j-1] + ans[i-1][j]); //否则赋值为该位置左上与右上的和
+            }
+        }
+        return ans;
+    }
+};
+```
+- 杨辉三角即该位置的值为左上角与右上角的和
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
