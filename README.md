@@ -822,7 +822,7 @@ public:
 };
 ```
 - 将数组从大到小排列，若位置【0】大于等于位置【1】，就符合条件，然后返回原始的索引（通过备份数组）
-###[66. 加一](https://leetcode.com/problems/plus-one/)
+### [66. 加一](https://leetcode.com/problems/plus-one/)
 ```cpp
 class Solution {
 public:
@@ -846,8 +846,7 @@ public:
             }
             if(digits[0] == 0) //若到最后最高位也等于0，需要多一位数 如99 + 1  此时为答案为00，进行一下操作
             {
-                digits.insert(digits.begin(),0); //在最高位的下一位插入0，再把最高为复制为1
-                digits[0] = 1;
+                digits.insert(digits.begin(),1); //在最高位插入1
             }
         }
         return digits;
@@ -855,7 +854,109 @@ public:
 };
 ```
 - 对于一般的数字，直接在末位加一即可
-- 本题特殊的两个点: 1.若加一之后的值为10，需要进一位。 2.若数字为类似999 ，加一之后需要多一位数。使用insert()来实现， insert函数 ： vec.insert(begin()+i ,a) 在第i个元素后插入a
+- 本题特殊的两个点: 1.若加一之后的值为10，需要进一位。 2.若数字为类似999 ，加一之后需要多一位数。使用insert()来实现， insert函数 ： vec.insert(begin()+i ,a) 在第i个元素插入a
+### [498. 对角线遍历](https://leetcode.com/problems/diagonal-traverse/)
+```cpp
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        vector <int> ans;
+        if(matrix.empty()) return ans; //若矩阵为空，直接返回空的答案
+        int m = matrix.size();
+        int n = matrix[0].size();
+        pair <int,int> temp = {0,0}; //用来遍历的point
+        int flag = 1; //记录遍历过程是否过半
+        while(ans.size() != m*n)
+        {   //upward，这部分描述斜向上
+            while(0 <= temp.first && temp.second < n)
+            {
+                ans.push_back(matrix[temp.first][temp.second]);
+                -- temp.first;
+                ++ temp.second;
+            }
+            ++ temp.first;
+            if(flag > n/2) //当遍历过半后，要有额外的操作来将point放到正确的位置
+            {
+                -- temp.second;
+                ++ temp.first;
+            }
+            //downward，这部分描述斜向下
+            while(temp.first < m && 0 <= temp.second)
+            {
+                ans.push_back(matrix[temp.first][temp.second]);
+                ++ temp.first;
+                -- temp.second;
+            }
+            ++ temp.second;
+            if(flag > m/2) ////当遍历过半后，要有额外的操作来将point放到正确的位置
+            {
+                -- temp.first;
+                ++ temp.second;
+            }
+            if(flag == m/2 && m%2==0) //若在中间状态，比较特殊。
+            {
+                -- temp.first;
+                ++ temp.second;
+            }
+            ++ flag;
+        }
+        return ans;
+    }
+};
+```
+- 通过题目描述可知，要对一个以特定顺序遍历矩阵的对角线。遍历的顺序是先斜上，再斜下，以此循环。因此我们可以将一次斜上加一次斜下遍历为一个循环。
+- |1. 先向斜上方遍历，直到超出矩阵范围，手动将它放到向斜下方向遍历的起始位置。   2. 再向斜下方遍历，直到超出矩范围，最后将它手动放到下一次循环的起始位置  3. 循环1，2步骤，直到答案的数组size 等于 matrix的元素个数|
+- 难点在于 1. 当遍历过程过半后，需要增加操作才将它放到下一次行动的起始位置。  2. 注意当遍历过程过半时，该次循环的判断条件，根据数组行数的奇偶而有所不同
+### [54. 螺旋矩阵](https://leetcode.com/problems/spiral-matrix/)
+```cpp
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector <int> ans;
+        if(matrix.empty()) return ans; //若数组为空，直接返回答案；
+        int u = 0; //赋值上下左右边界
+        int d = matrix.size() - 1;
+        int l = 0;
+        int r = matrix[0].size() - 1;
+        while(true)
+        {
+            for(int i = l; i <= r; ++i) ans.push_back(matrix[u][i]); //向右移动直到最右
+            if(++ u > d) break; //重新设定上边界，若上边界大于下边界，则遍历遍历完成，下同
+            for(int i = u; i <= d; ++i) ans.push_back(matrix[i][r]); //向下
+            if(-- r < l) break; //重新设定有边界
+            for(int i = r; i >= l; --i) ans.push_back(matrix[d][i]); //向左
+            if(-- d < u) break; //重新设定下边界
+            for(int i = d; i >= u; --i) ans.push_back(matrix[i][l]); //向上
+            if(++ l > r) break; //重新设定左边界
+        }
+        return ans;
+    }
+};
+```
+- 这里的方法不需要记录已经走过的路径，所以执行用时和内存消耗都相对较小
+- |1. 首先设定上下左右边界 2. 其次向右移动到最右，此时第一行因为已经使用过了，可以将其从图中删去，体现在代码中就是重新定义上边界 3. 判断若重新定义后，上下边界交错，表明螺旋矩阵遍历结束，跳出循环，返回答案 4. 若上下边界不交错，则遍历还未结束，接着向下向左向上移动，操作过程与第一，二步同理 5. 不断循环以上步骤，直到某两条边界交错，跳出循环，返回答案|
+### [118. 杨辉三角](https://leetcode.com/problems/pascals-triangle/)
+```cpp
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans(numRows);
+        if(numRows == 0)    return ans; //若numRows为空，返回空数组
+        for(int i = 0; i < numRows; ++ i ) //给数组一个个赋值
+        {
+            for(int j = 0; j <= i; ++ j)
+            {
+                if(j == 0 || j == i) //若是左右两边的边界，赋值为1
+                    ans[i].push_back(1);
+                else
+                    ans[i].push_back(ans[i-1][j-1] + ans[i-1][j]); //否则赋值为该位置左上与右上的和
+            }
+        }
+        return ans;
+    }
+};
+```
+- 杨辉三角即该位置的值为左上角与右上角的和
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
