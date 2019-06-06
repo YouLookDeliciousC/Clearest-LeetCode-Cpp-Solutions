@@ -998,6 +998,16 @@ public:
 - 3. 判断相加后的字符，若大于等于字符‘2’，下一位需要进一
 - 4. 第0位数的相加在这里是单独处理的，因为它可能涉及到字符的插入（即是否需要在最前面加一位数‘1’）
 - 笔记：若内存错误，需要查看是否出现死循环
+### [28. 实现strStr()](https://leetcode.com/problems/implement-strstr/)
+```cpp
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        return haystack.find(needle);
+    }
+};
+```
+- 第一个方法当然就是调用库函数了，函数返回想要寻找的字符串或者字符的位置，若不存在，返回-1。刚好符合题意。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
