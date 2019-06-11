@@ -1115,6 +1115,37 @@ public:
 - 题目描述不允许使用额外的数组空间，所以只能在原数组上操作。
 - 我们使用两个指针，一个快指针 i 和一个慢指针 k 。i 每次移动一步，而 k 只在添加新的被需要的值时才移动一步。
 - 因为我们的新数组的长度会小于等于旧数组，调用者在调用函数时根据返回的长度，它会打印出数组中该长度范围（k）内的所有元素。因此，范围外的元素不会输出。
+### [485. 最大连续1的个数](https://leetcode.com/problems/max-consecutive-ones/)
+```cpp
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int flag = 0; //记录每次连续1的个数
+        int ans = 0; //记录最大连续1的个数
+        for(int i = 0; i < nums.size(); ++ i)
+        {
+            if(nums[i] == 1)
+            {
+                ++flag;
+            }
+            else
+            {
+                if(ans < flag)
+                {
+                    ans = flag;
+                    flag = 0;
+                }
+                else
+                    flag = 0;
+            }
+        }
+        if(ans < flag)
+            ans = flag;
+        return ans;
+    }
+};
+```
+- 单指针遍历，若遇到1，flag + 1, 遇到0，判断此时flag是否大于ans记录的个数，若是，令ans = flag，且让flag初始化。 若否，只让flag初始化。最终剩下的ans就是最大连续1的个数。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
