@@ -1194,6 +1194,28 @@ public:
 ```
 - 这题直接将尾部元素插入到数组的头部这种做法会超时。这里通过反转数组来做
 - 想象一下，这里有一串数组[1,2,3,4,5,6,7] ，k = 3 。首先反转整个数组[7,6,5,4,3,2,1] 然后反转目标子数组[5,6,7,4,3,2,1] 最后反转目标外子数组[5,6,7,1,2,3,4]符合题目要求。
+### [119. 杨辉三角 II](https://leetcode.com/problems/pascals-triangle-ii/)
+```cpp
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<vector<int>> vec(rowIndex+1); //想要第rowIndex行，由于从零开始，需要初始化rowIndex + 1行
+        if(rowIndex == 0)   return {1}; //若需要第0行，返回1；
+        for(int i = 0; i <= rowIndex; ++ i) //一行一行生成
+        {
+            for(int j = 0; j <= i; ++ j)
+            {
+                if(j == 0 || j == i) //若位置在左右边界，直接填1
+                    vec[i].push_back(1);
+                else
+                    vec[i].push_back(vec[i-1][j-1] + vec[i-1][j]); //其它位置的值就是左上角与右上角的和
+            }
+        }
+        return vec[rowIndex]; //返回杨辉三角第rowIndex行
+    }
+};
+```
+- 杨辉三角每个位置的值就是该位置左上角与右上角的值。与杨辉三角Ⅰ的差别就是  只需要返回一层的数据。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
