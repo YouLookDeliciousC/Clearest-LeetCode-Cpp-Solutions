@@ -1231,9 +1231,9 @@ public:
         }
         if(s.empty())  return ans; //若s为空，不需要处理，直接返回空字符串
         int l = s.size();
-        while(i < l) //遍历当前字符串内的所有字符
+        while(i <= l) //遍历当前字符串内的所有字符
         {
-            if(s[i] == ' ') //当遇到空格，若temp里面有单词，压入栈mid
+            if(s[i] == ' ' || s[i] == '\0') //当遇到空格或'\0'，若temp里面有单词，压入栈mid
             {
                 if(!temp.empty())
                 {
@@ -1246,10 +1246,6 @@ public:
                 temp = temp + s[i];
             }
             ++ i;
-        }
-        if(!temp.empty()) //若原字符串s最后没有空格，这里需要手动向栈内压入最后一个单词
-        {
-            mid.push(temp);
         }
         int strsize = mid.size();
         for(int j = 0; j < strsize - 1; ++ j) //将栈内的单词放入ans，加上单词间的空格
