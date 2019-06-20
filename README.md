@@ -1454,8 +1454,6 @@ private:
 ```
 - 注释相对清晰，就不多说了
 - 注意size的正确更新，否则会影响到getNode函数返回值的正确与否
-# 题库解析
-默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ### [141. 环形链表](https://leetcode.com/problems/linked-list-cycle/)
 ```cpp
 class Solution {
@@ -1476,6 +1474,35 @@ public:
 ```
 - 当快指针套圈慢指针，双指针相遇时，说明链表中存在环
 - 常规的快慢指针解法，需要注意的是小心处理指针指向空指针的下一个指针（不存在）
+### [142. 环形链表 II](https://leetcode.com/problems/linked-list-cycle-ii/)
+```cpp
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !(head -> next)) return nullptr;
+        ListNode *faptr = head, *slptr = head;
+        while(faptr && faptr -> next)
+        {
+            faptr = faptr -> next -> next;
+            slptr = slptr -> next;
+            if(faptr == slptr)
+            {
+                slptr = head;
+                while(slptr != faptr)
+                {
+                    slptr = slptr -> next;
+                    faptr = faptr -> next;
+                }
+                return slptr;
+            }
+        }
+        return nullptr;
+    }
+};
+```
+- 待补充
+# 题库解析
+默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
 ### [238. Product of Array Except Self 双指针](https://leetcode.com/problems/product-of-array-except-self/)
 ```cpp
