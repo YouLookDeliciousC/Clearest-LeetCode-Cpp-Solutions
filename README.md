@@ -1501,6 +1501,37 @@ public:
 };
 ```
 - 待补充
+### [160. 相交链表](https://leetcode.com/problems/intersection-of-two-linked-lists/submissions/)
+```cpp
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(!headA || !headB)    return nullptr;
+        ListNode *countA = headA;
+        ListNode *countB = headB;
+        int lA = 0;
+        int lB = 0;
+        while(countA){
+            ++ lA;
+            countA = countA -> next;
+        }
+        while(countB){
+            ++ lB;
+            countB = countB -> next;
+        }
+        int i = max(lA,lB) - min(lA,lB);
+        if(lA > lB) for(i; i > 0; -- i) headA = headA -> next;
+        else    for(i; i > 0; -- i) headB = headB -> next;
+        while(headA){
+            if(headA == headB)  return headA;
+            headA = headA -> next;
+            headB = headB -> next;
+        }
+        return nullptr;
+    }
+};
+```
+- 假设两条链表有交点，可知相交部分等长,那么交点位置距离链表尾的距离必小于等于较短的链表。先将较长的链表剪去前面部分，使其的长度等于较短的链表。此时将指针从当前的headA 和headB同时向后移动，且对比指针是否相同，若相同则输出指针。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
