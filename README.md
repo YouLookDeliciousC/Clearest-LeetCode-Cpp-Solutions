@@ -1328,6 +1328,235 @@ public:
 - 0 移动到数组的末尾，相当于将非零数字全部移到第一个 0 的前面。
 - 找到第一个零，将第一个零之后的第一个非零数字与该 0 交换，从此之后令 nums[i] 永远等于数组内的第一个 0，nums[j] 永远等于第一个 0 后面的第一个非零数字，交换他们俩即可
 - 这样，既保持了非零元素的相对顺序，也将所有的 0 移动到了数组末尾
+###[707. 设计链表](https://leetcode.com/problems/design-linked-list/)
+```cpp
+struct Node{ //构造链表Node结构
+    int val; 
+    Node *prev, *next;
+    Node(int val): val(val), prev(nullptr), next(nullptr) {} //初始化
+};
+class MyLinkedList {
+public:
+    MyLinkedList(): head(nullptr), tail(nullptr),size(0){} //初始化链表
+    
+    
+    int get(int index) { //通过getNode函数返回第index个节点的地址，return 该节点的值
+        if(getNode(index))
+            return getNode(index) -> val;
+        return -1;
+    }
+    
+    void addAtHead(int val) { //在head添加节点
+        auto node = new Node(val); //创建一个Node实例，下同
+        ++ size; //链表长度加一，下同
+        if(head == nullptr) //如果链表为空，新加的node既是head也是tail，下同
+        {
+            head = node;
+            tail = node;
+        }
+        else
+        {
+            node -> next = head; //常规的添加头节点步骤，参照代码后的图解
+            head -> prev = node;
+            head = node;
+        }
+    }
+    
+    void addAtTail(int val) { //在tail添加节点
+        auto node = new Node(val);
+        ++ size;
+        if(tail == nullptr)
+        {
+            head = node;
+            tail = node;
+        }
+        else
+        {
+            node -> prev = tail; //常规的添加尾节点步骤，参照代码后的图解
+            tail -> next = node;
+            tail = node;
+        }
+    }
+    
+    void addAtIndex(int index, int val) {
+        if(index > size)    return; //如果索引大于链表长度，无效索引
+        if(index == size) //若索引等于链表长度，相当于添加尾节点，直接调用先前定义好的函数
+        {
+            addAtTail(val);
+            return;
+        }
+        if(index <= 0) //若索引小于链表长度，本题题目的bug，我们需要将它看成添加头节点，直接调用先前定义好的函数
+        {
+            addAtHead(val);
+            return;
+        }
+        auto node = new Node(val); //添加在非head非tail的位置的情况
+        auto nextNode = getNode(index); //过程参照代码后的图解
+        nextNode -> prev -> next = node;
+        node -> prev = nextNode -> prev;
+        node -> next = nextNode;
+        nextNode-> prev = node;
+        ++ size;
+    }
+    
+    void deleteAtIndex(int index) { //删除节点
+        if(auto node = getNode(index)) //若该节点不为nullptr，进行以下步骤
+        {
+            if(node == head) //若该节点为head，指针head更新为原来head的下一个点的位置
+            {
+                head = head -> next;
+                if(head != nullptr) head -> prev = nullptr; //若新head不为nullptr，将head的prev指针设为空，删除的节点的next指针设为空，即两者断开。
+                node -> next = nullptr;
+            }
+            if(node == tail) //若该节点为tail，与上一步类似
+            {
+                tail = tail -> prev;
+                if(tail != nullptr) tail -> next = nullptr;
+                node -> prev = nullptr;
+            }
+             //若目标节点上或下的指针还不为nullptr，说明指针还未独立出来，需要做以下操作
+            if(node -> next != nullptr) node -> next -> prev = node -> prev;
+            if(node -> prev != nullptr) node -> prev -> next = node -> next;
+            delete node;
+            -- size;
+        }
+    }
+private:
+    Node* getNode(int index) //获得目标节点位置，因为是双向链表，通过判断目标点位置在前半段还是后半段来决定从head开始搜索还是从tail搜索
+    {
+        if(index >= size || index < 0)  return nullptr;
+        Node* node;
+        int i;
+        if(size/2 >= index)
+        {
+            i = index;
+            node = head;
+            while(i -- > 0)
+            {
+                node = node -> next;
+            }
+        }
+        else
+        {
+            i = size - index - 1;
+            node = tail;
+            while(i -- > 0)
+                node = node -> prev;
+        }
+        return node;
+    }
+    
+private:
+    Node* head;
+    Node* tail;
+    int size;
+};
+```
+- 注释相对清晰，就不多说了
+- 注意size的正确更新，否则会影响到getNode函数返回值的正确与否
+### [141. 环形链表](https://leetcode.com/problems/linked-list-cycle/)
+```cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode *faptr = head;
+        ListNode *slptr = head;
+        while(faptr != nullptr && faptr -> next != nullptr)
+        {
+            faptr = faptr -> next -> next;
+            slptr = slptr -> next;
+            if(faptr == slptr)
+                return true;
+        }
+        return false;
+    }
+};
+```
+- 当快指针套圈慢指针，双指针相遇时，说明链表中存在环
+- 常规的快慢指针解法，需要注意的是小心处理指针指向空指针的下一个指针（不存在）
+### [142. 环形链表 II](https://leetcode.com/problems/linked-list-cycle-ii/)
+```cpp
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !(head -> next)) return nullptr;
+        ListNode *faptr = head, *slptr = head;
+        while(faptr && faptr -> next)
+        {
+            faptr = faptr -> next -> next;
+            slptr = slptr -> next;
+            if(faptr == slptr)
+            {
+                slptr = head;
+                while(slptr != faptr)
+                {
+                    slptr = slptr -> next;
+                    faptr = faptr -> next;
+                }
+                return slptr;
+            }
+        }
+        return nullptr;
+    }
+};
+```
+- 待补充
+### [160. 相交链表](https://leetcode.com/problems/intersection-of-two-linked-lists/submissions/)
+```cpp
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(!headA || !headB)    return nullptr;
+        ListNode *countA = headA;
+        ListNode *countB = headB;
+        int lA = 0;
+        int lB = 0;
+        while(countA){
+            ++ lA;
+            countA = countA -> next;
+        }
+        while(countB){
+            ++ lB;
+            countB = countB -> next;
+        }
+        int i = max(lA,lB) - min(lA,lB);
+        if(lA > lB) for(i; i > 0; -- i) headA = headA -> next;
+        else    for(i; i > 0; -- i) headB = headB -> next;
+        while(headA){
+            if(headA == headB)  return headA;
+            headA = headA -> next;
+            headB = headB -> next;
+        }
+        return nullptr;
+    }
+};
+```
+- 假设两条链表有交点，可知相交部分等长,那么交点位置距离链表尾的距离必小于等于较短的链表。先将较长的链表剪去前面部分，使其的长度等于较短的链表。此时将指针从当前的headA 和headB同时向后移动，且对比指针是否相同，若相同则输出指针。
+### [19. 删除链表的倒数第N个节点](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+```cpp
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(!head || !(head -> next))   return nullptr;
+        ListNode *temp = head;
+        int i = 0;
+        while(temp){ //用来计算删除的点是正数第几个
+            ++ i;
+            temp = temp -> next;
+        }
+        if(i == n){ //此时删除的是head节点
+            head = head -> next;
+            return head;
+        }
+        temp = head;
+        for(int j = i - n - 1; j > 0; -- j) temp = temp -> next; //找到该点
+        temp -> next = temp -> next -> next; //将它的指针指向下下个节点
+        return head;
+    }
+};
+```
+- 删除某点，只需要找到该点的上一个节点，将上一个节点的指针指向目标点的下一个节点，使目标点无法被访问，这样相当于目标点被从链表中删除
+- 当我们创建一个指针`ListNode *temp = head;`时，并没有创建一个新的链表，两个指针变量共用同一个链表。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
