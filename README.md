@@ -1532,6 +1532,31 @@ public:
 };
 ```
 - 假设两条链表有交点，可知相交部分等长,那么交点位置距离链表尾的距离必小于等于较短的链表。先将较长的链表剪去前面部分，使其的长度等于较短的链表。此时将指针从当前的headA 和headB同时向后移动，且对比指针是否相同，若相同则输出指针。
+### [19. 删除链表的倒数第N个节点](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+```cpp
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(!head || !(head -> next))   return nullptr;
+        ListNode *temp = head;
+        int i = 0;
+        while(temp){ //用来计算删除的点是正数第几个
+            ++ i;
+            temp = temp -> next;
+        }
+        if(i == n){ //此时删除的是head节点
+            head = head -> next;
+            return head;
+        }
+        temp = head;
+        for(int j = i - n - 1; j > 0; -- j) temp = temp -> next; //找到该点
+        temp -> next = temp -> next -> next; //将它的指针指向下下个节点
+        return head;
+    }
+};
+```
+- 删除某点，只需要找到该点的上一个节点，将上一个节点的指针指向目标点的下一个节点，使目标点无法被访问，这样相当于目标点被从链表中删除
+- 当我们创建一个指针`ListNode *temp = head;`时，并没有创建一个新的链表，两个指针变量共用同一个链表。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
