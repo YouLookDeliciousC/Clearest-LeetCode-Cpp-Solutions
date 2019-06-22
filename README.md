@@ -1557,6 +1557,27 @@ public:
 ```
 - 删除某点，只需要找到该点的上一个节点，将上一个节点的指针指向目标点的下一个节点，使目标点无法被访问，这样相当于目标点被从链表中删除
 - 当我们创建一个指针`ListNode *temp = head;`时，并没有创建一个新的链表，两个指针变量共用同一个链表。
+### [206. 反转链表](https://leetcode.com/problems/reverse-linked-list/)
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !(head -> next))   return head;
+        ListNode* x = head;
+        ListNode* y = head -> next;
+        ListNode* z = head -> next -> next;
+        x -> next = nullptr;
+        for(; z; z = z -> next){
+            y -> next = x;
+            x = y;
+            y = z;
+        }
+        y -> next = x;
+        return y;
+    }
+};
+```
+- 迭代
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
