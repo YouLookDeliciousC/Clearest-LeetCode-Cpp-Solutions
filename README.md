@@ -1637,6 +1637,36 @@ public:
 - 常规做法，取`odd`指针指向第一个节点，`even`指针指向第二个节点
 - 用指针`oddtemp` 和`eventemp` 来分离奇偶链表
 - 分离结束后将`odd`段链表的尾指针指向`even`链表的`head`。
+### [234. 回文链表](https://leetcode.com/problems/palindrome-linked-list/)
+```cpp
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode* count = head;
+        int i = 0;
+        stack <int> value;
+        while(count){
+            ++ i;
+            count = count -> next;
+        }
+        if(i == 1)  return true;
+        for(int j = i / 2; j > 0; -- j){
+            value.push(head -> val);
+            head = head -> next;
+        }
+        if(i % 2 == 1)  head = head -> next;
+        for(int j = i / 2; j > 0; -- j){
+            if(value.top() != head -> val)  return false;
+            else{
+                head = head -> next;
+                value.pop();
+            }
+        }
+        return true;
+    }
+};
+```
+- 这种对称配对题很自然想到使用栈`stack`来进行前半段和后半段对比
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
