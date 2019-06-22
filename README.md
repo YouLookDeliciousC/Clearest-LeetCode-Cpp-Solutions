@@ -1608,6 +1608,35 @@ public:
 2. 若头节点的值与val相等，将头节点向后移一个位置
 3. 赋值prev节点和cur节点，判断cur节点的值是否与val相等，若是，将cur节点删除
 - 删除方法，将prev节点的指针指向cur的下一个节点，这样，cur的值就无法被访问，等同于删除。
+### [328. 奇偶链表](https://leetcode.com/problems/odd-even-linked-list/)
+```cpp
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if(!head)   return nullptr;
+        ListNode* even = head -> next;
+        ListNode* oddtemp = head;
+        ListNode* eventemp = even;
+        while(oddtemp && eventemp && eventemp -> next){
+            oddtemp -> next = eventemp -> next;
+            oddtemp = oddtemp -> next;
+            eventemp -> next = oddtemp -> next;
+            eventemp = eventemp -> next;
+        }
+        if(!eventemp){
+            oddtemp -> next = even;
+        }
+        else{
+            eventemp -> next = nullptr;
+            oddtemp -> next = even;
+        }
+        return head;
+    }
+};
+```
+- 常规做法，取`odd`指针指向第一个节点，`even`指针指向第二个节点
+- 用指针`oddtemp` 和`eventemp` 来分离奇偶链表
+- 分离结束后将`odd`段链表的尾指针指向`even`链表的`head`。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
