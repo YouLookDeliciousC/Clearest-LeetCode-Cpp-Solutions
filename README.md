@@ -1557,6 +1557,166 @@ public:
 ```
 - 删除某点，只需要找到该点的上一个节点，将上一个节点的指针指向目标点的下一个节点，使目标点无法被访问，这样相当于目标点被从链表中删除
 - 当我们创建一个指针`ListNode *temp = head;`时，并没有创建一个新的链表，两个指针变量共用同一个链表。
+### [206. 反转链表](https://leetcode.com/problems/reverse-linked-list/)
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !(head -> next))   return head;
+        ListNode* x = head;
+        ListNode* y = head -> next;
+        ListNode* z = head -> next -> next;
+        x -> next = nullptr;
+        for(; z; z = z -> next){
+            y -> next = x;
+            x = y;
+            y = z;
+        }
+        y -> next = x;
+        return y;
+    }
+};
+```
+- 迭代
+### [203. 移除链表元素](https://leetcode.com/problems/remove-linked-list-elements/)
+```cpp
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if(!head) return nullptr;
+        while(head -> val == val){
+            head = head -> next;
+            if(!head)   return nullptr;
+        }
+        ListNode* prev = head;
+        ListNode* cur = head -> next;
+        while(cur){
+            if(cur -> val == val){
+                prev -> next = cur -> next;
+                cur = prev -> next;
+            }
+            else{
+                prev = cur;
+                cur = cur -> next;
+            }
+        }
+        return head;
+    }
+};
+```
+1. 若head为nullptr，返回nullptr
+2. 若头节点的值与val相等，将头节点向后移一个位置
+3. 赋值prev节点和cur节点，判断cur节点的值是否与val相等，若是，将cur节点删除
+- 删除方法，将prev节点的指针指向cur的下一个节点，这样，cur的值就无法被访问，等同于删除。
+### [328. 奇偶链表](https://leetcode.com/problems/odd-even-linked-list/)
+```cpp
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if(!head)   return nullptr;
+        ListNode* even = head -> next;
+        ListNode* oddtemp = head;
+        ListNode* eventemp = even;
+        while(oddtemp && eventemp && eventemp -> next){
+            oddtemp -> next = eventemp -> next;
+            oddtemp = oddtemp -> next;
+            eventemp -> next = oddtemp -> next;
+            eventemp = eventemp -> next;
+        }
+        if(!eventemp){
+            oddtemp -> next = even;
+        }
+        else{
+            eventemp -> next = nullptr;
+            oddtemp -> next = even;
+        }
+        return head;
+    }
+};
+```
+- 常规做法，取`odd`指针指向第一个节点，`even`指针指向第二个节点
+- 用指针`oddtemp` 和`eventemp` 来分离奇偶链表
+- 分离结束后将`odd`段链表的尾指针指向`even`链表的`head`。
+### [234. 回文链表](https://leetcode.com/problems/palindrome-linked-list/)
+```cpp
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode* count = head;
+        int i = 0;
+        stack <int> value;
+        while(count){
+            ++ i;
+            count = count -> next;
+        }
+        if(i == 1)  return true;
+        for(int j = i / 2; j > 0; -- j){
+            value.push(head -> val);
+            head = head -> next;
+        }
+        if(i % 2 == 1)  head = head -> next;
+        for(int j = i / 2; j > 0; -- j){
+            if(value.top() != head -> val)  return false;
+            else{
+                head = head -> next;
+                value.pop();
+            }
+        }
+        return true;
+    }
+};
+```
+- 这种对称配对题很自然想到使用栈`stack`来进行前半段和后半段对比
+### [21. 合并两个有序链表](https://leetcode.com/problems/merge-two-sorted-lists/)
+```cpp
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(!l1) return l2;
+        if(!l2) return l1;
+        if(l1 -> val < l2 -> val){
+            l1 -> next = mergeTwoLists(l1 -> next, l2);
+            return l1;
+        }
+        else{
+            l2 -> next = mergeTwoLists(l1, l2 -> next);
+            return l2;
+        }
+    }
+};
+```
+- 递归法
+```cpp
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(!l1) return l2;
+        if(!l2) return l1;
+        ListNode *begin = l1 -> val < l2 -> val ? l1 : l2;
+        ListNode *ll1 = l1 -> val < l2 -> val ? l1 -> next : l1;
+        ListNode *ll2 = l1 -> val < l2 -> val ? l2 : l2 -> next;
+        ListNode *cur = begin;
+        while(ll2){
+            if(ll1 && ll1 -> val <= ll2 -> val){
+                cur -> next = ll1;
+                cur = cur -> next;
+                ll1 = ll1 -> next;
+            }
+            else{
+                cur -> next = ll2;
+                cur = cur -> next;
+                ll2 = ll2 -> next;
+            }
+        }
+        if(ll1){
+            cur -> next = ll1;
+        }
+        return begin;
+    }
+};
+```
+- 迭代法
+- 想象：让两个队伍的小朋友自己根据从矮到高的原则排队。从两队的队首开始对比，由于时有序链表，若其中一队排列结束，另一队剩余的人直接接在整个队伍的后方。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
