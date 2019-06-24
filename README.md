@@ -1847,6 +1847,39 @@ stack
 - 取出每个节点，压入栈内，再按顺序（LIFO）一个个取出，加上两个节点间的关系
 - 记得清空`child`指针
 - 注意while循环内前两个`if`语句的顺序，先`next`的节点，后`child`节点。(LIFO)
+### [138. 复制带随机指针的链表]
+还没写
+
+
+### [61. 旋转链表](https://leetcode.com/problems/rotate-list/)
+```cpp
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(k == 0 || !head || !(head -> next))  return head;
+        ListNode *temp = head;
+        int len = 0;
+        while(temp){
+            ++ len;
+            temp = temp -> next;
+        }
+        k = k % len;
+        temp = head;
+        for(int i = len - 1; i > 0; -- i)   temp = temp -> next;
+        temp -> next = head;
+        temp = head;
+        for(int j = len - k; j > 0; -- j)   temp = temp -> next;
+        head = temp;
+        for(int m = len - 1; m > 0; -- m)   temp = temp -> next;
+        temp -> next = nullptr;
+        return head;
+    }
+};
+```
+- 取得链表长度len
+- 让它成环（即tail -> next = head)
+- 向右移动k步相当于head顺着指针路线走len-k步
+- 然后向右移动len-1步找到tail节点,让他指向nullptr
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
