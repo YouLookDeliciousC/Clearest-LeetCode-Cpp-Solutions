@@ -1880,6 +1880,36 @@ public:
 - 让它成环（即tail -> next = head)
 - 向右移动k步相当于head顺着指针路线走len-k步
 - 然后向右移动len-1步找到tail节点,让他指向nullptr
+### [138. 复制带随机指针的链表](https://leetcode.com/problems/copy-list-with-random-pointer/)
+```cpp
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head)   return nullptr;
+        Node *cohead = head;
+        while(cohead){
+            Node *copy = new Node(cohead -> val, cohead -> next, nullptr); //初始化要赋值，要不会出错
+            Node *temp = cohead -> next;
+            cohead -> next = copy;
+            cohead = temp;
+        }
+        cohead = head;
+        while(cohead){
+            if(cohead -> random)    cohead -> next ->random = cohead -> random -> next;
+            cohead = cohead -> next -> next;
+        }
+        cohead = head;
+        Node *ans = head -> next;
+        while(cohead -> next){
+            Node *temp = cohead -> next;
+            cohead -> next = cohead -> next -> next;
+            cohead = temp;
+        }
+        return ans;
+    }
+};
+```
+- 相似的，克隆图形可以在原始图形上复制完全后，再分离，有点像染色体复制。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
