@@ -7,6 +7,7 @@ Clearest LeetCode C++ Solutions. This project is intended to clarify the problem
 - 水平有限，若您发现已存在的代码中如有冗余部分，欢迎 issue 或 PR。
 - 另外这里有一份[ 🐍 Python 最短题解](https://github.com/cy69855522/Shortest-LeetCode-Python-Solutions)，带您体验 python 中各种让人叹为观止的奇巧解法，如果您对俩门语言都感兴趣的话，同时服用效果更佳。
 - 欢迎加入QQ交流群：902025048 [∷二维码](QR.png) 群内提供更多相关资料~
+- 推荐使用【Ctrl + F】按键搜索题号
 # 专题探索
 ![](思维导图.jpg)
 
