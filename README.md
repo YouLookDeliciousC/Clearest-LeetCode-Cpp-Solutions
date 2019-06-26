@@ -1717,6 +1717,196 @@ public:
 ```
 - 迭代法
 - 想象：让两个队伍的小朋友自己根据从矮到高的原则排队。从两队的队首开始对比，由于时有序链表，若其中一队排列结束，另一队剩余的人直接接在整个队伍的后方。
+### [2. 两数相加](https://leetcode.com/problems/add-two-numbers/)
+```cpp
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        queue <int> list1;
+        queue <int> list2;
+        queue <int> ans;
+        ListNode *temp1 = l1;
+        ListNode *temp2 = l2;
+        ListNode *ex = new ListNode(1);
+        int size1 = 0;
+        int size2 = 0;
+        while(temp1){
+            ++ size1;
+            temp1 = temp1 -> next;
+        }
+        while(temp2){
+            ++ size2;
+            temp2 = temp2 -> next;
+        }
+        ListNode *head = size1 < size2 ? l2 : l1;
+        ListNode *copyhead = head;
+        for(int i = size1; i > 0; -- i){
+            list1.push(l1 -> val);
+            l1 = l1 -> next;
+        }
+        for(int j = size2; j > 0; -- j){
+            list2.push(l2 -> val);
+            l2 = l2 -> next;
+        }
+        int diff = abs(size1 - size2);
+        if(size1 > size2)   for(; diff > 0; -- diff)    list2.push(0);
+        else    for(; diff > 0; -- diff)    list1.push(0);
+        int q = list1.size();
+        int flag = 0;
+        for(q; q > 0; -- q){
+            int sum = list1.front() + list2.front() + flag;
+            flag = 0;
+            list1.pop();
+            list2.pop();
+            if(sum > 9){
+                sum -= 10;
+                flag = 1;
+            }
+            ans.push(sum);
+        }
+        for(int len = ans.size() - 1; len > 0; -- len){
+            copyhead -> val = ans.front();
+            ans.pop();
+            copyhead = copyhead -> next;
+        }
+        copyhead -> val = ans.front();
+        if(flag == 1)   copyhead -> next = ex;
+        return head;
+    }
+};
+```
+1. 用queue来做，同位相加
+2. 将位数较少的数字在高位补零，使两个数字长度相同
+3. 注意进位的话需要在tail添加一个节点。
+### [430. 扁平化多级双向链表](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/)
+```cpp
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        Node *temp = head;
+        Node *nextnode = nullptr;
+        Node *prevnode = head;
+        while(prevnode){
+            if(temp && temp -> child){
+                nextnode = temp -> next; //记录当前节点的下一个节点
+                temp -> child -> prev = temp;
+                temp -> next = flatten(temp -> child); //进入递归
+                temp -> child = nullptr; //注销当前节点的child；
+            }
+            prevnode = temp; //记录null节点的前一个节点
+            if(temp)    temp = temp -> next;
+            if(nextnode && !temp){ //当同一级链表存在下一个节点（即，原来有child的节点的下一节点），且子链表到达null
+                prevnode -> next = nextnode; //连接子节点和之前记录的nextnode所指链表 ---->这一步将其中两级双向链表扁平化
+                nextnode -> prev = prevnode;
+                temp = prevnode -> next;
+                nextnode = nullptr; //记得清空使用过的nextnode，否则会将无限连接nextnode所指链表
+            }
+        }
+        return head;
+    }
+};
+```
+递归法
+1. 若`child`为`nllptr`，将指针移向`next`节点
+2. 若`child`不为空，进入递归，传入头节点（即，`child`的第一位）
+3. 连接子链表的尾端和父节点的下一节点。
+-  用`nextnode`记录有`child`的节点的下一个节点，用来连接在子链表的尾端
+- 通过判断到达链表尾端时，`nextnode`是否为`nullptr`，若是，则该尾端就是第一级链表的尾端，若不是，该尾端就是子链表的尾端。（注意使用`nextnode`连接子链表后，需要将`nextnode`清空，否则会重复连接子链表）
+- `prevnode`用来记录`temp`的前一个节点，当`temp`到尾端时为`null`，这时用`prevnode`来连接`nextnode`。
+```cpp
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        if(!head)   return nullptr;
+        Node *cur;
+        stack <Node*> stk;
+        stk.push(head);
+        Node *pre = nullptr;
+        while(!stk.empty()){
+            cur = stk.top();
+            stk.pop();
+            if(cur -> next){
+                stk.push(cur -> next);
+            }
+            if(cur -> child){
+                stk.push(cur -> child);
+                cur -> child = nullptr;
+            }
+            if(pre){
+                pre -> next = cur;
+                cur -> prev = pre;
+            }
+            pre = cur;
+        }
+        return head;
+    }
+};
+```
+stack
+- 常规DFS遍历，使用stack（LIFO）遍历整个链表
+- 取出每个节点，压入栈内，再按顺序（LIFO）一个个取出，加上两个节点间的关系
+- 记得清空`child`指针
+- 注意while循环内前两个`if`语句的顺序，先`next`的节点，后`child`节点。(LIFO)
+### [138. 复制带随机指针的链表](https://leetcode.com/problems/copy-list-with-random-pointer/)
+```cpp
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head)   return nullptr;
+        Node *cohead = head;
+        while(cohead){
+            Node *copy = new Node(cohead -> val, cohead -> next, nullptr); //初始化要赋值，要不会出错
+            Node *temp = cohead -> next;
+            cohead -> next = copy;
+            cohead = temp;
+        }
+        cohead = head;
+        while(cohead){
+            if(cohead -> random)    cohead -> next ->random = cohead -> random -> next;
+            cohead = cohead -> next -> next;
+        }
+        cohead = head;
+        Node *ans = head -> next;
+        while(cohead -> next){
+            Node *temp = cohead -> next;
+            cohead -> next = cohead -> next -> next;
+            cohead = temp;
+        }
+        return ans;
+    }
+};
+```
+- 相似的，克隆图形可以在原始图形上复制完全后，再分离，有点像染色体复制。
+- 调用函数要尽量赋值形参，否则可能会出错
+### [61. 旋转链表](https://leetcode.com/problems/rotate-list/)
+```cpp
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(k == 0 || !head || !(head -> next))  return head;
+        ListNode *temp = head;
+        int len = 0;
+        while(temp){
+            ++ len;
+            temp = temp -> next;
+        }
+        k = k % len;
+        temp = head;
+        for(int i = len - 1; i > 0; -- i)   temp = temp -> next;
+        temp -> next = head;
+        temp = head;
+        for(int j = len - k; j > 0; -- j)   temp = temp -> next;
+        head = temp;
+        for(int m = len - 1; m > 0; -- m)   temp = temp -> next;
+        temp -> next = nullptr;
+        return head;
+    }
+};
+```
+- 取得链表长度len
+- 让它成环（即tail -> next = head)
+- 向右移动k步相当于head顺着指针路线走len-k步
+- 然后向右移动len-1步找到tail节点,让他指向nullptr
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
