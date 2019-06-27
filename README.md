@@ -2032,6 +2032,26 @@ public:
 };
 ```
 - 与上一题的唯一一个差别在于，本题一个key只能有一个value，所以我们用一个节点同时储存key和value，计算哈希值，然后进行操作
+### [217. 存在重复元素](https://leetcode.com/problems/contains-duplicate/)
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_set <int> hashset;
+        for(auto i : nums){
+            if(hashset.count(i) > 0){
+                return true;
+            }
+            else{
+                hashset.insert(i);
+            }
+        }
+        return false;
+    }
+};
+```
+- 用内置函数`unordered_set`,若还不存在该值就插入到set内，
+- 若count>0 返回true
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
