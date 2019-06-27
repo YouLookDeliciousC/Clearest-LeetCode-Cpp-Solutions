@@ -2032,6 +2032,91 @@ public:
 };
 ```
 - 与上一题的唯一一个差别在于，本题一个key只能有一个value，所以我们用一个节点同时储存key和value，计算哈希值，然后进行操作
+### [217. 存在重复元素](https://leetcode.com/problems/contains-duplicate/)
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_set <int> hashset;
+        for(auto i : nums){
+            if(hashset.count(i) > 0){
+                return true;
+            }
+            else{
+                hashset.insert(i);
+            }
+        }
+        return false;
+    }
+};
+```
+- 用内置函数`unordered_set`,若还不存在该值就插入到set内，
+- 若count>0 返回true
+### [136. 只出现一次的数字](https://leetcode.com/problems/single-number/)
+```
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_set<int> bobo;
+        int ans;
+        for(auto i : nums){
+            if(bobo.count(i))   bobo.erase(i);
+            else    bobo.insert(i);
+        }
+        for(auto j : bobo)  ans = j;
+        return ans;
+    }
+};
+```
+哈希集
+- 若第一次出现，插入哈希集
+- 第二次出现，冲哈希集内删除
+- 最后剩下的就是那个只出现一次的数字
+```
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        for(int i = 0, j = 1; j < nums.size(); i += 2, j += 2){
+            if(nums[i] != nums[j])  return nums[i];
+        }
+        return nums[nums.size() - 1];
+    }
+};
+```
+先排序，再用双指针对比。
+```
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = nums[0];
+        for(int i = 1; i < nums.size(); ++ i){
+            ans = ans ^ nums[i];
+        }
+        return ans;
+    }
+};
+```
+异或
+- 任何一个数字异或它自己都等于0。也就是说，如果我们从头到尾依次异或数组中的每一个数字，那么最终的结果刚好是那个只出现一次的数字，因为那些出现两次的数字全部在异或中抵消掉了。
+```
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        map<int,int> n;
+        int ans = 0;
+        for(int i = 0; i < nums.size(); ++ i){
+            n[nums[i]] == 1? n[nums[i]] = 2: n[nums[i]] = 1;
+        }
+        for(int j = 0; j < nums.size(); ++ j){
+            if(n[nums[j]] == 1)  ans = nums[j];
+        }
+        return ans;
+    }
+};
+```
+map
+- 实现效果是最差的，就不说了
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
