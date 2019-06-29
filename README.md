@@ -2161,6 +2161,27 @@ public:
 1. 到1的时候进入循环（即1，1，1……循环），返回true
 2. 到非1的时候进入循环，返回false
 - 因为都会产生循环，直到开始进入循环的点跳出循环，检查开始进入循环的点是否是1，若是1，n就是快乐数，若不是，n就不是快乐数
+### [1. 两数之和--hashmap的练习](https://leetcode.com/problems/two-sum/)
+```
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> hashmap;
+        int i = 0;
+        for(auto key : nums){
+            if(hashmap.count(target - key)){
+                return {hashmap[target - key],i};
+            }
+            else{
+                hashmap[key] = i;
+                cout << key <<"  =  " << i << endl;
+                ++ i;
+            }
+        }
+        return {};
+    }
+};
+```
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
