@@ -2118,7 +2118,7 @@ public:
 map
 - 实现效果是最差的，就不说了
 ### [202. 快乐数](https://leetcode.com/problems/happy-number/)
-```
+```cpp
 class Solution {
 public:
     bool isHappy(int n) {
@@ -2133,6 +2133,27 @@ public:
             n = sum;
         }
         return n == 1;
+    }
+};
+```
+```cpp
+//递归
+class Solution {
+public:
+    unordered_set<int> bobo;
+    bool isHappy(int n) {
+        int sum = 0;
+        if(n == 1) return true;
+        else if(bobo.count(n))  return false;
+        else{
+            bobo.insert(n);
+            while(n != 0){
+                sum = sum + (n%10) * (n%10);
+                n /= 10;
+            }
+            n = sum;
+        }
+        return isHappy(n);
     }
 };
 ```
