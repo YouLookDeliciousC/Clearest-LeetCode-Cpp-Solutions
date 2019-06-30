@@ -2117,6 +2117,150 @@ public:
 ```
 map
 - 实现效果是最差的，就不说了
+### [202. 快乐数](https://leetcode.com/problems/happy-number/)
+```cpp
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> bobo;
+        while(!bobo.count(n)){
+            int sum = 0;
+            bobo.insert(n);
+            while(n != 0){
+                sum = sum + (n%10) * (n%10);
+                n /= 10;
+            }
+            n = sum;
+        }
+        return n == 1;
+    }
+};
+```
+```cpp
+//递归
+class Solution {
+public:
+    unordered_set<int> bobo;
+    bool isHappy(int n) {
+        int sum = 0;
+        if(n == 1) return true;
+        else if(bobo.count(n))  return false;
+        else{
+            bobo.insert(n);
+            while(n != 0){
+                sum = sum + (n%10) * (n%10);
+                n /= 10;
+            }
+            n = sum;
+        }
+        return isHappy(n);
+    }
+};
+```
+本题计算的结果就分为两种，
+1. 到1的时候进入循环（即1，1，1……循环），返回true
+2. 到非1的时候进入循环，返回false
+- 因为都会产生循环，直到开始进入循环的点跳出循环，检查开始进入循环的点是否是1，若是1，n就是快乐数，若不是，n就不是快乐数
+### [1. 两数之和--hashmap的练习](https://leetcode.com/problems/two-sum/)
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> hashmap;
+        int i = 0;
+        for(auto key : nums){
+            if(hashmap.count(target - key)){
+                return {hashmap[target - key],i};
+            }
+            else{
+                hashmap[key] = i;
+                ++ i;
+            }
+        }
+        return {};
+    }
+};
+```
+### [205. 同构字符串 双解](https://leetcode.com/problems/isomorphic-strings/)
+```cpp
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char,char> smap;
+        unordered_map<char,char> tmap;
+        for(int i = 0; s[i] != '\0'; ++ i){
+            char ss = s[i];
+            char tt = t[i];
+            if(smap.count(ss)){
+                if(smap[ss] != tt)    return false;
+            }
+            else if(tmap.count(tt)){
+                if(tmap[tt] != ss)  return false;
+            }
+            else{
+                smap[ss] = tt;
+                tmap[tt] = ss;
+            }
+        }
+        return true;
+    }
+};
+```
+- 常规解法，使用哈希映射，两个字符串相互映射。
+```cpp
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        for(int i=0;i<s.size();i++){
+            if(s.find(s[i])!=t.find(t[i]))
+                return false;
+        }
+        return true;
+    }
+};
+```
+- 对比两个字符串对应位置的字符在字符串内第一次出现的位置。
+### [599. 两个列表的最小索引总和](https://leetcode.com/problems/minimum-index-sum-of-two-lists/submissions/)
+```cpp
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        vector<string> ans;
+        vector<pair<int,string>> No;
+        unordered_map<string,int> l1;
+        unordered_map<string,int> l2;
+        int i = 0;
+        int j = 0;
+        int count;
+        for(auto re1 : list1){ //将餐厅名称与索引映射
+            l1[re1] = i;
+            ++ i;
+        }
+        for(auto re2 : list2){
+            l2[re2] = j;
+            ++ j;
+        }
+        for(auto name : list2){ //找到两个列表内都出现的餐厅名称，并计算索引和
+            int sum = 0;
+            if(l1.count(name)){
+                sum = l1[name] + l2[name];
+                No.push_back({sum,name});
+            }
+        }
+        int target = INT_MAX;
+        for(int p = 0; p < No.size(); ++ p){ //找到最小索引和的大小
+            target = No[p].first < target ? No[p].first : target;
+        }
+        for(int f = 0; f < No.size(); ++ f){ //将等于最小索引和的餐厅名放入答案列表
+            if(No[f].first == target){
+                ans.push_back(No[f].second);
+            }
+        }
+        return ans;
+    }
+};
+```
+- 思路都在代码注释里
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
