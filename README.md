@@ -2279,6 +2279,35 @@ public:
 根据提示使用哈希映射
 1. 遍历一遍字符串记录每个字母出现的次数
 2. 遍历hashmap，找出第一个出现次数只有一次的字符
+### [350. 两个数组的交集 II](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+```cpp
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int,int> n1;
+        unordered_map<int,int> n2;
+        vector<int> ans = {};
+        for(auto i : nums1){
+            if(n1.count(i)) n1[i] += 1;
+            else    n1[i] = 1;
+        }
+        for(auto i : nums2){
+            if(n2.count(i)) n2[i] += 1;
+            else    n2[i] = 1;
+        }
+        for(auto i : n1){
+            while(n1[i.first] >= 1 && n2[i.first] >= 1){
+                ans.push_back(i.first);
+                -- n1[i.first];
+                -- n2[i.first];
+            }
+        }
+        return ans;
+    }
+};
+```
+- 用两个`unordered_map`记录两个数组内每个数字出现的次数
+- 若两个映射都存在某个数字，将该数字压入数组，该数字所在关键字的value减一
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
