@@ -2354,6 +2354,31 @@ public:
 };
 ```
 - 在原始信息和哈希映射使用的实际键之间建立映射关系。 在这里体现为，将单词字母按字母表顺序排列，若排列结果相同，则为字母异位词
+### [36. 有效的数独](https://leetcode.com/problems/valid-sudoku/)
+```cpp
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<unordered_map<int,int>> row(9);
+        vector<unordered_map<int,int>> col(9);
+        vector<unordered_map<int,int>> block(9);
+        for(int i = 0; i < 9; ++ i){
+            for(int j = 0; j < 9; ++ j){
+                int bindex =  (i / 3)* 3 + j / 3;
+                char cur = board[i][j];
+                if(cur == '.')  continue;
+                if(row[i].count(cur) || col[j].count(cur) || block[bindex].count(cur))  return false;
+                row[i][cur] = 1;
+                col[j][cur] = 1;
+                block[bindex][cur] = 1;
+            }
+        }
+        return true;
+    }
+};
+```
+- 使用数组搭配`unordered_map`，遍历数独，判断是否已经存在，若存在返回false，若不存在，将数字作为关键字插入对应行列设值为一。
+- 用hashset也一样。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
