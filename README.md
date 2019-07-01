@@ -2308,6 +2308,29 @@ public:
 ```
 - 用两个`unordered_map`记录两个数组内每个数字出现的次数
 - 若两个映射都存在某个数字，将该数字压入数组，该数字所在关键字的value减一
+### [219. 存在重复元素 II](https://leetcode.com/problems/contains-duplicate-ii/)
+```cpp
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int> hashmap;
+        unordered_map<int,int> temp; //用来记录当前元素的上一次映射
+        for(int i = 0; i < nums.size(); ++ i){
+            if(hashmap.count(nums[i])){
+                if(!temp.count(nums[i]))    temp[nums[i]] = i;
+                else{
+                    hashmap[nums[i]] = temp[nums[i]];
+                    temp.erase(nums[i]);
+                }
+                if(i - hashmap[nums[i]] <= k)   return true;
+            }
+            else    hashmap[nums[i]] = i;
+        }
+        return false;
+    }
+};
+```
+- 使用一个哈希映射temp来记录当前元素的上一次映射，当元素重复两次以上，hashmap可以用temp来更新为当前元素的上一次映射的索引。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
