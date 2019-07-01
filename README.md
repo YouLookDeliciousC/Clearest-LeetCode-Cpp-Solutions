@@ -2331,6 +2331,29 @@ public:
 };
 ```
 - 使用一个哈希映射temp来记录当前元素的上一次映射，当元素重复两次以上，hashmap可以用temp来更新为当前元素的上一次映射的索引。
+### [49. 字母异位词分组](https://leetcode.com/problems/group-anagrams/submissions/)
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> hashmap;
+        for(auto s : strs){
+            string temp = s;
+            sort(temp.begin(), temp.end());
+            hashmap[temp].push_back(s);
+        }
+        int len = hashmap.size();
+        vector<vector<string>> ans(len);
+        int index = 0;
+        for(auto i : hashmap){
+            ans[index] = i.second;
+            ++ index;
+        }
+        return ans;
+    }
+};
+```
+- 在原始信息和哈希映射使用的实际键之间建立映射关系。 在这里体现为，将单词字母按字母表顺序排列，若排列结果相同，则为字母异位词
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
