@@ -2395,6 +2395,27 @@ public:
 };
 ```
 - 把宝石类型J记录进set中，用count函数一块块鉴定所拥有的石头是否属于set内的任意一个。若是，ans加一。
+### [3. 无重复字符的最长子串](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int ans = 0;
+        for(int i = 0; s[i] != '\0'; ++ i){
+            unordered_set<char> str;
+            int len = 0;
+            for(int j = i; s[j] != '\0'; ++ j){
+                if(str.count(s[j])) break;
+                str.insert(s[j]);
+                ++ len;
+            }
+            len > ans? ans = len : ans = ans;
+        }
+        return ans;
+    }
+};
+```
+- 思路很简单很暴力，记录每次遇到重复之前最长的子串len，并与答案候选ans对比，若大于ans就赋值给ans
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
