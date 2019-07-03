@@ -2416,6 +2416,32 @@ public:
 };
 ```
 - 思路很简单很暴力，记录每次遇到重复之前最长的子串len，并与答案候选ans对比，若大于ans就赋值给ans
+### [454. 四数相加 II](https://leetcode.com/problems/4sum-ii/)
+```cpp
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        int ans = 0;
+        unordered_map<int,int> ab;
+        for(auto a : A){
+            for(auto b : B){
+                int sum = a + b;
+                if(!ab.count(sum))  ab[sum] = 1;
+                else    ab[sum] += 1;
+            }
+        }
+        for(auto c : C){
+            for(auto d : D){
+                int need = -(c + d);
+                if(ab.count(need))  ans = ans + ab[need];
+            }
+        }
+        return ans;
+    }
+};
+```
+- 建立一个哈希映射，一个记录AB数组的组合和，和为key，出现的次数为value
+- 计算CD数组的组合和，得到相反数，若该数存在于key中，即符合要求，将答案加上AB组合和中该数出现的次数(value)
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
