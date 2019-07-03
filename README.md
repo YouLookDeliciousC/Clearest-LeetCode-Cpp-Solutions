@@ -2442,6 +2442,43 @@ public:
 ```
 - 建立一个哈希映射，一个记录AB数组的组合和，和为key，出现的次数为value
 - 计算CD数组的组合和，得到相反数，若该数存在于key中，即符合要求，将答案加上AB组合和中该数出现的次数(value)
+### [347. 前K个高频元素](https://leetcode.com/problems/top-k-frequent-elements/)
+```cpp
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int max = 0;
+        int mf = 0;
+        unordered_map<int,int> c;
+        vector<int> ans = {};
+        for(auto i : nums){
+            if(!c.count(i)) c[i] = 1;
+            else    c[i] += 1;   
+        }
+        if(c.size() == k){
+            for(auto key : c){
+                ans.push_back(key.first);
+            }
+            sort(ans.begin(),ans.end());
+            return ans;
+        }
+        for(int j = 0; j < k; ++ j){
+            int val = 0;
+            int flag = 0; 
+            for(auto n : c){
+                if(c[n.first] > val){
+                    val = c[n.first];
+                    flag = n.first;
+                }
+            }
+            ans.push_back(flag);
+            c.erase(flag);
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
+```
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
