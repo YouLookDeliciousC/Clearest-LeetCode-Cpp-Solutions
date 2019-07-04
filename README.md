@@ -2261,6 +2261,299 @@ public:
 };
 ```
 - 思路都在代码注释里
+### [387. 字符串中的第一个唯一字符](https://leetcode.com/problems/first-unique-character-in-a-string/)
+```cpp
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char,int> hashmap;
+        for(auto i : s){
+            if(hashmap.count(i))    hashmap[i] += 1;
+            else    hashmap[i] = 1;
+        }
+        for(int j = 0; s[j] != '\0'; ++ j)  if(hashmap[s[j]] == 1)  return j;
+        return -1;
+    }
+};
+```
+根据提示使用哈希映射
+1. 遍历一遍字符串记录每个字母出现的次数
+2. 遍历hashmap，找出第一个出现次数只有一次的字符
+### [350. 两个数组的交集 II](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+```cpp
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int,int> n1;
+        unordered_map<int,int> n2;
+        vector<int> ans = {};
+        for(auto i : nums1){
+            if(n1.count(i)) n1[i] += 1;
+            else    n1[i] = 1;
+        }
+        for(auto i : nums2){
+            if(n2.count(i)) n2[i] += 1;
+            else    n2[i] = 1;
+        }
+        for(auto i : n1){
+            while(n1[i.first] >= 1 && n2[i.first] >= 1){
+                ans.push_back(i.first);
+                -- n1[i.first];
+                -- n2[i.first];
+            }
+        }
+        return ans;
+    }
+};
+```
+- 用两个`unordered_map`记录两个数组内每个数字出现的次数
+- 若两个映射都存在某个数字，将该数字压入数组，该数字所在关键字的value减一
+### [219. 存在重复元素 II](https://leetcode.com/problems/contains-duplicate-ii/)
+```cpp
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int> hashmap;
+        unordered_map<int,int> temp; //用来记录当前元素的上一次映射
+        for(int i = 0; i < nums.size(); ++ i){
+            if(hashmap.count(nums[i])){
+                if(!temp.count(nums[i]))    temp[nums[i]] = i;
+                else{
+                    hashmap[nums[i]] = temp[nums[i]];
+                    temp.erase(nums[i]);
+                }
+                if(i - hashmap[nums[i]] <= k)   return true;
+            }
+            else    hashmap[nums[i]] = i;
+        }
+        return false;
+    }
+};
+```
+- 使用一个哈希映射temp来记录当前元素的上一次映射，当元素重复两次以上，hashmap可以用temp来更新为当前元素的上一次映射的索引。
+### [49. 字母异位词分组](https://leetcode.com/problems/group-anagrams/submissions/)
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> hashmap;
+        for(auto s : strs){
+            string temp = s;
+            sort(temp.begin(), temp.end());
+            hashmap[temp].push_back(s);
+        }
+        int len = hashmap.size();
+        vector<vector<string>> ans(len);
+        int index = 0;
+        for(auto i : hashmap){
+            ans[index] = i.second;
+            ++ index;
+        }
+        return ans;
+    }
+};
+```
+- 在原始信息和哈希映射使用的实际键之间建立映射关系。 在这里体现为，将单词字母按字母表顺序排列，若排列结果相同，则为字母异位词
+### [36. 有效的数独](https://leetcode.com/problems/valid-sudoku/)
+```cpp
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<unordered_map<int,int>> row(9);
+        vector<unordered_map<int,int>> col(9);
+        vector<unordered_map<int,int>> block(9);
+        for(int i = 0; i < 9; ++ i){
+            for(int j = 0; j < 9; ++ j){
+                int bindex =  (i / 3)* 3 + j / 3;
+                char cur = board[i][j];
+                if(cur == '.')  continue;
+                if(row[i].count(cur) || col[j].count(cur) || block[bindex].count(cur))  return false;
+                row[i][cur] = 1;
+                col[j][cur] = 1;
+                block[bindex][cur] = 1;
+            }
+        }
+        return true;
+    }
+};
+```
+- 使用数组搭配`unordered_map`，遍历数独，判断是否已经存在，若存在返回false，若不存在，将数字作为关键字插入对应行列设值为一。
+- 用hashset也一样。
+### [寻找重复的子树]
+
+### [771. 宝石与石头](https://leetcode.com/problems/jewels-and-stones/)
+```cpp
+class Solution {
+public:
+    int numJewelsInStones(string J, string S) {
+        int ans = 0;
+        unordered_set<char> jew;
+        for(auto i : J) jew.insert(i); //记录宝石类型
+        for(auto s : S) if(jew.count(s))    ++ ans; //若拥有的石头里有宝石，答案加一
+        return ans;
+    }
+};
+```
+- 把宝石类型J记录进set中，用count函数一块块鉴定所拥有的石头是否属于set内的任意一个。若是，ans加一。
+### [3. 无重复字符的最长子串](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int ans = 0;
+        for(int i = 0; s[i] != '\0'; ++ i){
+            unordered_set<char> str;
+            int len = 0;
+            for(int j = i; s[j] != '\0'; ++ j){
+                if(str.count(s[j])) break;
+                str.insert(s[j]);
+                ++ len;
+            }
+            len > ans? ans = len : ans = ans;
+        }
+        return ans;
+    }
+};
+```
+- 思路很简单很暴力，记录每次遇到重复之前最长的子串len，并与答案候选ans对比，若大于ans就赋值给ans
+### [454. 四数相加 II](https://leetcode.com/problems/4sum-ii/)
+```cpp
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        int ans = 0;
+        unordered_map<int,int> ab;
+        for(auto a : A){
+            for(auto b : B){
+                int sum = a + b;
+                if(!ab.count(sum))  ab[sum] = 1;
+                else    ab[sum] += 1;
+            }
+        }
+        for(auto c : C){
+            for(auto d : D){
+                int need = -(c + d);
+                if(ab.count(need))  ans = ans + ab[need];
+            }
+        }
+        return ans;
+    }
+};
+```
+- 建立一个哈希映射，一个记录AB数组的组合和，和为key，出现的次数为value
+- 计算CD数组的组合和，得到相反数，若该数存在于key中，即符合要求，将答案加上AB组合和中该数出现的次数(value)
+### [347. 前K个高频元素](https://leetcode.com/problems/top-k-frequent-elements/)
+```cpp
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int max = 0;
+        int mf = 0;
+        unordered_map<int,int> c;
+        vector<int> ans = {};
+        for(auto i : nums){
+            if(!c.count(i)) c[i] = 1;
+            else    c[i] += 1;   
+        }
+        if(c.size() == k){
+            for(auto key : c){
+                ans.push_back(key.first);
+            }
+            sort(ans.begin(),ans.end());
+            return ans;
+        }
+        for(int j = 0; j < k; ++ j){
+            int val = 0;
+            int flag = 0; 
+            for(auto n : c){
+                if(c[n.first] > val){
+                    val = c[n.first];
+                    flag = n.first;
+                }
+            }
+            ans.push_back(flag);
+            c.erase(flag);
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
+```
+### [704. 二分查找](https://leetcode.com/problems/binary-search/)
+```cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int ans = -1;
+        int l = 0;
+        int r = nums.size() - 1;
+        int mid = (l + r) / 2;
+        if(nums[0] == target)   return 0; //数组仅有一位的情况或刚好第零个为目标值的情况
+        if(nums[mid] == target) return mid; //初始mid为目标值的情况
+        while(nums[mid] != target){
+            if(mid == l){ //当左右边界相邻时，mid的结果总是等于左边界
+                if(nums[mid] == target) return mid;
+                else if(nums[r] == target)  return r;
+                else return -1;
+            }
+            if(nums[mid] > target){
+                r = mid;
+            }
+            else{
+                l = mid;
+            }
+            mid = (l + r) / 2;
+            ans = mid;
+        }
+        return ans; 
+    }
+};
+```
+- 设定数组的开头和尾端为左右边界，mid为(l + r)/2
+- 若target大于mid 将l赋值为mid，重新计算mid值
+- 若target小于mid 将r赋值为mid，重新计算mid值
+### [69. x 的平方根](https://leetcode.com/problems/sqrtx/)
+```cpp
+class Solution {
+public:
+    int mySqrt(int x) {
+        if(x == 0 || x == 1)    return x;
+        int l = 0;
+        int r = x;
+        while(l <= r){
+            int mid = l + (r - l) /2;
+            int s = x / mid; //用来判断mid大于目标还是小于目标，或等于目标
+            int ss = x / (mid + 1);
+            if(x / s == s)  return s; //刚好是他的算术平方根
+            if(s > mid && ss < mid + 1) return mid; //例如6 在2的平方以及 3的平方之间  答案为2
+            if(s > mid) l = mid + 1; //调整边界
+            if(s < mid) r = mid - 1;
+        }
+        return 0;
+    }
+};
+```
+- 使用二分法，通过对x和mid的商的比较，得到答案
+- 注意：不能通过mid*mid来与x进行比较，会溢出
+### [374. 猜数字大小](https://leetcode.com/problems/guess-number-higher-or-lower/)
+```cpp
+class Solution {
+public:
+    int guessNumber(int n) {
+        int l = 1;
+        int r = n;
+        while(l <= r){
+            int mid = l + (r -l) / 2; //相当于（l+r）/2，但用这种写法能防止溢出
+            int g = guess(mid);
+            if(g == 0)  return mid;
+            else if(g == -1) r = mid - 1;
+            else if(g == 1) l = mid + 1;
+        }
+        return 0;
+    }
+};
+```
+根据反馈进行调整，使用二分查找
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
