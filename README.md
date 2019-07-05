@@ -2554,6 +2554,43 @@ public:
 };
 ```
 根据反馈进行调整，使用二分查找
+### [33. 搜索旋转排序数组](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+```cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int ans = -1;
+        if(nums.empty())    return ans;
+        int l = 0;
+        int r = nums.size() - 1;
+        int minlo = l; //储存最小值的索引
+        int maxlo = r; //储存最大值的索引
+        if(nums.size() == 1){ //如果只有一个数字，直接判断
+            if(nums[0] == target)   return 0;
+            else return ans;
+        }
+        for(int i = 0, j = 1; j< nums.size(); ++ i, ++ j){ //找到数组旋转的位置
+            if(nums[i] > nums[j]){
+                minlo = j;
+                maxlo = i;
+            }
+        }
+        if(target > nums[maxlo] || target < nums[minlo])    return ans; //如果在数字范围之内
+        if(target >= nums[0])   r = maxlo; //重新设定边界----在左半段的情况      修改r值
+        else if(target <= nums[r])  l = minlo; //在右半段的情况   修改l值
+        else    return -1;
+        while(l <= r){ //二分法常规模板
+            int mid = l + (r - l) / 2;
+            if(nums[mid] == target)   return mid;
+            if(nums[mid] > target)    r = mid - 1;
+            else    l = mid + 1;
+        }
+        return ans;
+    }
+};
+```
+- 由于算法时间复杂度必须是 O(log n) 级别，暗示要用二分法
+- 因为旋转前数组为升序，旋转后旋转点两侧仍是升序，我们只需先找到旋转点的位置，然后判断target在前段还是后段，之后再用二分法进行查找即可
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
