@@ -2591,6 +2591,28 @@ public:
 ```
 - 由于算法时间复杂度必须是 O(log n) 级别，暗示要用二分法
 - 因为旋转前数组为升序，旋转后旋转点两侧仍是升序，我们只需先找到旋转点的位置，然后判断target在前段还是后段，之后再用二分法进行查找即可
+### [278. 第一个错误的版本](https://leetcode.com/problems/first-bad-version/)
+```cpp
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int left = 1, right = n;
+        if(isBadVersion(1))  return 1;
+        while(left < right){
+        // Prevent (left + right) overflow
+            int mid = left + (right - left) / 2;
+            if(!isBadVersion(mid - 1) && isBadVersion(mid)) return mid;
+            else if(!isBadVersion(mid)) left = mid + 1;
+            else    right = mid;
+        }
+        // Post-processing:
+        // End Condition: left == right
+        if(isBadVersion(left) && !isBadVersion(left - 1)) return left;
+        return -1;
+    }
+};
+```
+- 这里要查找的是第一个错误版本，因此我们在查找到错误版本时，还需要判断该版本的前一个版本是不是正确版本。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
