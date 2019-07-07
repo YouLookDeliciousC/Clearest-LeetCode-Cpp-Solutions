@@ -2554,6 +2554,112 @@ public:
 };
 ```
 根据反馈进行调整，使用二分查找
+### [33. 搜索旋转排序数组](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+```cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int ans = -1;
+        if(nums.empty())    return ans;
+        int l = 0;
+        int r = nums.size() - 1;
+        int minlo = l; //储存最小值的索引
+        int maxlo = r; //储存最大值的索引
+        if(nums.size() == 1){ //如果只有一个数字，直接判断
+            if(nums[0] == target)   return 0;
+            else return ans;
+        }
+        for(int i = 0, j = 1; j< nums.size(); ++ i, ++ j){ //找到数组旋转的位置
+            if(nums[i] > nums[j]){
+                minlo = j;
+                maxlo = i;
+            }
+        }
+        if(target > nums[maxlo] || target < nums[minlo])    return ans; //如果在数字范围之内
+        if(target >= nums[0])   r = maxlo; //重新设定边界----在左半段的情况      修改r值
+        else if(target <= nums[r])  l = minlo; //在右半段的情况   修改l值
+        else    return -1;
+        while(l <= r){ //二分法常规模板
+            int mid = l + (r - l) / 2;
+            if(nums[mid] == target)   return mid;
+            if(nums[mid] > target)    r = mid - 1;
+            else    l = mid + 1;
+        }
+        return ans;
+    }
+};
+```
+- 由于算法时间复杂度必须是 O(log n) 级别，暗示要用二分法
+- 因为旋转前数组为升序，旋转后旋转点两侧仍是升序，我们只需先找到旋转点的位置，然后判断target在前段还是后段，之后再用二分法进行查找即可
+### [278. 第一个错误的版本](https://leetcode.com/problems/first-bad-version/)
+```cpp
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int left = 1, right = n;
+        if(isBadVersion(1))  return 1;
+        while(left < right){
+        // Prevent (left + right) overflow
+            int mid = left + (right - left) / 2;
+            if(!isBadVersion(mid - 1) && isBadVersion(mid)) return mid;
+            else if(!isBadVersion(mid)) left = mid + 1;
+            else    right = mid;
+        }
+        // Post-processing:
+        // End Condition: left == right
+        if(isBadVersion(left) && !isBadVersion(left - 1)) return left;
+        return -1;
+    }
+};
+```
+- 这里要查找的是第一个错误版本，因此我们在查找到错误版本时，还需要判断该版本的前一个版本是不是正确版本。
+### [162. 寻找峰值](https://leetcode.com/problems/find-peak-element/)
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int l = 0, r = nums.size()-1;
+        if(nums.size() == 1)    return 0;
+        if(nums.size() == 2)    return nums[0] > nums[1] ? 0 : 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            cout << mid<< endl;
+            if((mid == 0 && nums[mid] > nums[mid + 1]) || (mid == nums.size() - 1 && nums[mid] > nums[mid - 1]) ||(mid != 0 && mid != nums.size()-1 && nums[mid] > nums[mid + 1] && nums[mid] > nums[mid - 1])) return mid;
+            if(mid == 0 || nums[mid + 1] > nums[mid - 1])  l = mid + 1;
+            else    r = mid - 1;
+        }
+        return -1;
+    }
+};
+```
+- 当数组大小为一时，返回0（题：你可以假设 nums[-1] = nums[n] = -∞。）
+- 当数组大小为二时，对比返回较大值的索引
+- 当数组大于二时，峰值可能出现在数组的中间某处或左右边界，因此注意条件
+- 将范围往斜率上升的方向缩
+### [153. 寻找旋转排序数组中的最小值](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int l = 0, r = nums.size() - 1;
+        if(nums.size() == 1)    return nums[0];
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            cout << mid << endl;
+            if((mid == 0 && nums[mid] < nums[mid + 1]) || (mid == nums.size()-1 && nums[mid] < nums[mid - 1]) || (mid != 0 && mid != nums.size()-1 && nums[mid] < nums[mid-1] && nums[mid] < nums[mid+1]))   return nums[mid];
+            if(nums[r] <nums[l] && nums[mid] < nums[r]) r = mid - 1;
+            else if(nums[r] > nums[l])  r = l;
+            else if(nums[mid] > nums[r])    l = mid + 1;
+        }
+        return -1;
+    }
+};
+```
+通过二分查找不断缩小范围，目标值的要求是小于左右相邻的值
+三个重新界定左右边界的条件
+1. 右边界小于左边界，且mid位置的值小于右边界，说明最小值在旋转后的数组的右半段。
+2. 右边界大于左边界，说明范围内数组由小到大排列，直接收敛r=l。
+3. mid位置的值大于右边界，说明最小值在mid值的右边。
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
