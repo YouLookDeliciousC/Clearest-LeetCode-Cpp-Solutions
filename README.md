@@ -2660,7 +2660,7 @@ public:
 1. 右边界小于左边界，且mid位置的值小于右边界，说明最小值在旋转后的数组的右半段。
 2. 右边界大于左边界，说明范围内数组由小到大排列，直接收敛r=l。
 3. mid位置的值大于右边界，说明最小值在mid值的右边。
-###[34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 ```cpp
 class Solution {
 public:
