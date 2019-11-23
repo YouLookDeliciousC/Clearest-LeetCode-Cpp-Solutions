@@ -2762,6 +2762,29 @@ public:
 - 题目所给的数组是排序好的数组，我们要的答案就是数组内长度为k的一段连续的部分数组。
 - 寻找左端点，当l == r时，出循环，此时l是目标数组的第一个端点，只需将该端点及该端点右边的k个值（包括第一个端点）返回即可
 
+### [162. 寻找峰值](https://leetcode.com/problems/find-peak-element/)
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int l = 0, r = nums.size()-1;
+        if(nums.size() == 1)    return 0;
+        if(nums.size() == 2)    return nums[0] > nums[1] ? 0 : 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if((mid == 0 && nums[mid] > nums[mid + 1]) || (mid == nums.size() - 1 && nums[mid] > nums[mid - 1]) ||(mid != 0 && mid != nums.size()-1 && nums[mid] > nums[mid + 1] && nums[mid] > nums[mid - 1])) return mid;
+            if(mid == 0 || nums[mid + 1] > nums[mid - 1])  l = mid + 1;
+            else    r = mid - 1;
+        }
+        return -1;
+    }
+};
+```
+- 当数组大小为一时，返回0（题：你可以假设 nums[-1] = nums[n] = -∞。）
+- 当数组大小为二时，对比返回较大值的索引
+- 当数组大于二时，峰值可能出现在数组的中间某处或左右边界，因此注意条件
+- 将范围往斜率上升的方向缩
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
