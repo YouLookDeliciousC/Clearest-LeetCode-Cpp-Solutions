@@ -2876,6 +2876,29 @@ public:
 ```
 - 在ASCII码中，字符可以直接比较大小，即内置数值进行比较，小写子母中，从a到z字符逐渐增大；
 - 二分法模板③
+
+### [154. 寻找旋转排序数组中的最小值 II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int l = 0, r = nums.size()-1;
+        if(nums[0] < nums[r])  return nums[0];
+        while(l + 1 < r){
+            int mid = l + (r - l)/2;
+            if(nums[mid] < nums[r])    r = mid;
+            else if(nums[mid] > nums[r])   l = mid;
+            else{
+                -- r;
+            }
+        }
+        return nums[r];
+    }
+};
+```
+- 基本跟153差不多
+- 去重即可   即代码中`--r`
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
