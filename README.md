@@ -2812,6 +2812,51 @@ public:
 };
 ```
 - 需要用long来存储指数
+
+### [367. 有效的完全平方数](https://leetcode.com/problems/valid-perfect-square/)
+```cpp
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        int l = 0, r = 46340;
+        while(l <= r){ // 二分法找根
+            int mid = l + (r - l) / 2;
+            long power = mid * mid;
+            if(power > num){
+                r = mid -1;
+            }
+            else if(power < num){
+                l = mid +1;
+            }
+            else{
+                return true;
+            }
+        }
+        return false;
+    }
+};
+```
+方法一：二分法
+- 首先要知道一个前提，整型底数上限为46340 即  整数最大值为 2147483647 而其中最大的有效的完全平方数为 46340 *46340 = 2147395600
+- 使用二分法查找num的根
+
+```cpp
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        long odd = 1, power = 0;
+        while(true){
+            power += odd;
+            odd += 2;
+            if(power == num)    return true;
+            if(power > num)     return false;
+        }
+        return true;
+    }
+};
+```
+- 根据公式 1 + 3 + 5 + 7 +... +(2n+1) = n^2   即完全平方数肯定是前n个连续奇数的和
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
