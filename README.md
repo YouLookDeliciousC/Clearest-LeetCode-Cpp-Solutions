@@ -2785,6 +2785,33 @@ public:
 - 当数组大于二时，峰值可能出现在数组的中间某处或左右边界，因此注意条件
 - 将范围往斜率上升的方向缩
 
+### [50. Pow(x, n)](https://leetcode.com/problems/powx-n/)
+```cpp
+class Solution {
+public:
+    //二分法，不断将指数减半
+    double basicPow(double x, long n){
+        if(n == 0)  return 1.0; // 顶
+        double half = basicPow(x, n / 2);
+        if(n % 2 == 0){ //根据奇偶性分
+            return half * half;
+        }
+        else{
+            return half * half * x;
+        }
+    }
+    double myPow(double x, int n) {
+        long N = n;
+        if(N == 0)  return 1.0;
+        if(N < 0){ //处理指数为负数的情况
+            x = 1 / x;
+            N = - N;
+        }
+        return basicPow(x, N);
+    }
+};
+```
+- 需要用long来存储指数
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
