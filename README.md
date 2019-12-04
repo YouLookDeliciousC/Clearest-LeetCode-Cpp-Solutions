@@ -2660,6 +2660,270 @@ public:
 1. 右边界小于左边界，且mid位置的值小于右边界，说明最小值在旋转后的数组的右半段。
 2. 右边界大于左边界，说明范围内数组由小到大排列，直接收敛r=l。
 3. mid位置的值大于右边界，说明最小值在mid值的右边。
+### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+```cpp
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> ans = {-1, -1};
+        if(nums.empty()) return ans; // 数组为空的情况
+        int l = 0, r = nums.size()-1;
+        if(nums[l] > target) return ans; // 若target不在数组范围内
+        if(nums[r] < target) return ans;
+        
+        while(l < r){ // 先查找元素的第一个位置
+            int mid = l + (r - l)/2;
+            if(nums[mid] >= target) r = mid;
+            else l = mid + 1;
+        } // 到出循环时，索引 l 和 r 在同一个位置，即查找元素的第一个位置
+        if(nums[l] == target)   ans[0] = l; // 防止查找元素在数组位置内 但 数组内没有目标元素
+        r = nums.size(); // 不设成 nums.size() - 1 的原因是，应对数组大小为一的情况，后面操作会超出索引。
+        while(l < r){ // 查找元素的最后一个位置
+            int mid = l + (r - l)/2;
+            if(nums[mid] > target) r = mid;
+            else l = mid + 1;
+        }
+        // 到处循环时，l和r 在同一个位置，即 查找元素的最后一个位置的下一位
+        if(nums[l - 1] == target)   ans[1] = l - 1;
+        return ans;
+    }
+};
+```
+- 先查找元素第一个位置后查找元素最后一个位置
+### [658. 找到 K 个最接近的元素](https://leetcode.com/problems/find-k-closest-elements/)
+- 方法一：根据题意的常规做法
+```cpp
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        vector<int> ans(k);
+        int l = 0, r = arr.size() - 1;
+        int i = 0;
+        while(l + 1 < r){ //找到最靠近x的两个数
+            int mid = l + (r - l) / 2;
+            if(arr[mid] <= x) l = mid;
+            else r = mid;
+        }
+        while(i < k){ // 两个数分别与x 相减，对比两个差，放进数组。
+            int subl,subr;
+            if(l < r){ // 用来处理超出边界的情况
+                subl = x - arr[l];
+                subr = arr[r] - x;
+            }
+            else{
+                subl = arr[l] - x;
+                subr = x - arr[r];
+            }
+            if(subl - subr <= 0){
+                ans[i] = arr[l];
+                -- l;
+                if(l == -1) l = arr.size() -1;
+            }
+            else{
+                ans[i] = arr[r];
+                ++ r;
+                if(r == arr.size()) r = 0;
+            }
+            ++ i;
+        }
+        sort(ans.begin(),ans.end()); //排序
+        return ans;
+    }
+};
+```
+- 先找到最靠近x得两个数
+- 求与x得差，对比，小的放入数组
+- 处理边界方法， 若l超出左边界，将索引l的值移到最右边，接下来会把索引r的值依次放入ans数组。
+- 最后排序
+- ===============
+- 方法二：来自评论区的大佬。二分法加滑动窗口
+```cpp
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int left = 0;
+        int right = arr.size() - k;
+        while(left < right)
+        {
+            int mid = (left + right) / 2;
+            if(x - arr[mid] > arr[mid + k] - x)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid;
+            }
+        }
+        return vector<int>(arr.begin() + left, arr.begin() + k + left); // 返回左边界到距离左边界k个值得一段数组
+    }
+};
+```
+- 题目所给的数组是排序好的数组，我们要的答案就是数组内长度为k的一段连续的部分数组。
+- 寻找左端点，当l == r时，出循环，此时l是目标数组的第一个端点，只需将该端点及该端点右边的k个值（包括第一个端点）返回即可
+
+### [162. 寻找峰值](https://leetcode.com/problems/find-peak-element/)
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int l = 0, r = nums.size()-1;
+        if(nums.size() == 1)    return 0;
+        if(nums.size() == 2)    return nums[0] > nums[1] ? 0 : 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if((mid == 0 && nums[mid] > nums[mid + 1]) || (mid == nums.size() - 1 && nums[mid] > nums[mid - 1]) ||(mid != 0 && mid != nums.size()-1 && nums[mid] > nums[mid + 1] && nums[mid] > nums[mid - 1])) return mid;
+            if(mid == 0 || nums[mid + 1] > nums[mid - 1])  l = mid + 1;
+            else    r = mid - 1;
+        }
+        return -1;
+    }
+};
+```
+- 当数组大小为一时，返回0（题：你可以假设 nums[-1] = nums[n] = -∞。）
+- 当数组大小为二时，对比返回较大值的索引
+- 当数组大于二时，峰值可能出现在数组的中间某处或左右边界，因此注意条件
+- 将范围往斜率上升的方向缩
+
+### [50. Pow(x, n)](https://leetcode.com/problems/powx-n/)
+```cpp
+class Solution {
+public:
+    //二分法，不断将指数减半
+    double basicPow(double x, long n){
+        if(n == 0)  return 1.0; // 顶
+        double half = basicPow(x, n / 2);
+        if(n % 2 == 0){ //根据奇偶性分
+            return half * half;
+        }
+        else{
+            return half * half * x;
+        }
+    }
+    double myPow(double x, int n) {
+        long N = n;
+        if(N == 0)  return 1.0;
+        if(N < 0){ //处理指数为负数的情况
+            x = 1 / x;
+            N = - N;
+        }
+        return basicPow(x, N);
+    }
+};
+```
+- 需要用long来存储指数
+
+### [367. 有效的完全平方数](https://leetcode.com/problems/valid-perfect-square/)
+```cpp
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        int l = 0, r = 46340;
+        while(l <= r){ // 二分法找根
+            int mid = l + (r - l) / 2;
+            long power = mid * mid;
+            if(power > num){
+                r = mid -1;
+            }
+            else if(power < num){
+                l = mid +1;
+            }
+            else{
+                return true;
+            }
+        }
+        return false;
+    }
+};
+```
+方法一：二分法
+- 首先要知道一个前提，整型底数上限为46340 即  整数最大值为 2147483647 而其中最大的有效的完全平方数为 46340 *46340 = 2147395600
+- 使用二分法查找num的根
+
+```cpp
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        long odd = 1, power = 0;
+        while(true){
+            power += odd;
+            odd += 2;
+            if(power == num)    return true;
+            if(power > num)     return false;
+        }
+        return true;
+    }
+};
+```
+方法二：数学法
+- 根据公式 1 + 3 + 5 + 7 +... +(2n+1) = n^2   即完全平方数肯定是前n个连续奇数的和
+
+### [744. 寻找比目标字母大的最小字母](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
+```cpp
+class Solution {
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        int l = 0, r = letters.size() - 1;
+        if(target >= letters[r] || target < letters[l])  return letters[l]; //因为是循环数组，如果target不在数组范围内，直接返回数组第一个字符
+        while(l + 1 < r){ // 二分法模板③，l始终在目标字符或者目标字符的左边，r 始终再目标字符的右边，当两者相遇跳出循环时，r刚好在目标字符位置的右边
+            int mid = l + (r - l)/2;
+            if(letters[mid] > target) r = mid;
+            else    l = mid;
+        }
+        return letters[r];
+    }
+};
+```
+- 在ASCII码中，字符可以直接比较大小，即内置数值进行比较，小写子母中，从a到z字符逐渐增大；
+- 二分法模板③
+
+### [154. 寻找旋转排序数组中的最小值 II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int l = 0, r = nums.size()-1;
+        if(nums[0] < nums[r])  return nums[0];
+        while(l + 1 < r){
+            int mid = l + (r - l)/2;
+            if(nums[mid] < nums[r])    r = mid;
+            else if(nums[mid] > nums[r])   l = mid;
+            else{
+                -- r;
+            }
+        }
+        return nums[r];
+    }
+};
+```
+- 基本跟153差不多
+- 去重即可   即代码中`--r`
+
+### [287. 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)
+```cpp
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int l = 1, r = nums.size();
+        while(l < r){
+            int mid = l + (r - l) / 2;
+            int count = 0;
+            for(int i : nums){
+                if(i < mid) ++ count;
+            }
+            if(count < mid){
+                l = mid + 1;
+            }
+            else{
+                r = mid;
+            }
+        }
+        return l-1;
+    }
+};
+```
+
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
@@ -2693,6 +2957,7 @@ public:
   2.初始化变量l（left）代表左边的乘积，从左到右遍历数组，每次都让新数组的值乘以它左边数字的乘积l，然后更新l。此时新数组里的所有数字就代表了nums数组中对应位置左边所有数字的乘积
   
   3.再从右往左做一遍同样的操作，最终`res[i] = 1 * nums中i左边所有数字的乘积 * nums中i右边所有数字的乘积`
+ 
 ### [448. Find All Numbers Disappeared in an Array 伪哈希](https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/)
 ```cpp
 class Solution {
