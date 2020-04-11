@@ -3013,6 +3013,58 @@ public:
 - 个人认为难点在于找到哪里到哪里为一个循环
 - 首先，我们知道从root开始。然后遍历左子树，直到NULL。然后指向最后一个root的右子树。从这里进入循环，以新的点为root。
 
+### [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+#### 基本思想--迭代法
+- 先遍历左节点直到左节点为null。
+- 开始遍历右节点，若该右节点有左节点，优先遍历左节点。
+- 使用`rightchild`来记录右节点是否已被遍历过。若是：则说明以该点为根的子树已被遍历，输出根节点。若否：就开始遍历右节点，回到第二步。
+```cpp
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        stack<TreeNode*> stk;
+        TreeNode* cur = root;
+        TreeNode* rightchild = NULL;
+        while(cur || !stk.empty()){
+            while(cur != NULL){
+                stk.push(cur);
+                cur = cur -> left;
+            }
+            cur = stk.top();
+            if(!cur -> right|| rightchild == cur -> right){
+                ans.push_back(cur -> val);
+                stk.pop();
+                rightchild = cur;
+                cur = NULL;
+            }
+            else{
+                rightchild = NULL;
+                cur = cur -> right;
+            }
+        }
+        return ans;
+    }
+};
+```
+#### 基本思想--递归法
+- 若该点为null，则返回。
+- 遍历左子树
+- 遍历右子树
+- 记录根节点的值。
+```cpp
+class Solution {
+public:
+    vector<int> ans;
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(!root)   return ans;
+        postorderTraversal(root -> left);
+        postorderTraversal(root -> right);
+        ans.push_back(root -> val);
+        return ans;
+    }
+};
+```
 
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
