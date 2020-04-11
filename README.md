@@ -3065,6 +3065,73 @@ public:
     }
 };
 ```
+### [102. 二叉树的层序遍历]（https://leetcode-cn.com/problems/binary-tree-level-order-traversal/）
+#### 基本思路1--使用单层循环
+- 遍历每一层，然后把`flag`放在每层最后，用来分割上下两层。将每一层存入`ans`容器内
+```cpp
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(!root)   return ans;
+        queue<TreeNode*> q;
+        TreeNode* ptr = root;
+        TreeNode* flag = new TreeNode(-1);
+        int lvl = 0, ele = 0;
+        q.push(root);
+        q.push(flag);
+        vector<int> row;
+        while(!q.empty()){
+            if(q.front() == flag){
+                ans.push_back(row);
+                row.clear();
+                q.pop();
+                q.push(flag);
+                continue;
+            }
+            TreeNode* temp = q.front();
+            q.pop();
+            row.push_back(temp -> val);
+            if(temp -> left)    q.push(temp -> left);
+            if(temp -> right)   q.push(temp -> right);
+            if(q.size() == 1){
+                ans.push_back(row);
+                break;
+            }
+        }
+        return ans;
+    }
+};
+```
+#### 基本思路2--使用双层循环
+- 这个方法比较好。
+- 也是遍历每一层，无需flag分离。
+- 以每一层为整体。总共两个while循环，外部while循环遍历层（由上到下），内部while循环遍历每一层内的节点（由左到右）。
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(!root)   return ans;
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            int count = q.size();
+            vector<int> row;
+            while(count--){
+                TreeNode* temp = q.front();
+                q.pop();
+                row.push_back(temp -> val);
+                if(temp -> left)    q.push(temp -> left);
+                if(temp -> right)   q.push(temp -> right);    
+            }
+            ans.push_back(row);
+        }
+        return ans;
+    }
+};
+```
 
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
