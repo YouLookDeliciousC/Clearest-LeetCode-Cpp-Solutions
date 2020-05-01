@@ -3150,6 +3150,19 @@ public:
     }
 };
 ```
+### [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
+- 通过用sum减去一条路径的每个节点的值，到达叶节点时，判断sum是否为0。
+```cpp
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(!root)   return false;
+        sum -= root -> val;
+        if((!root -> left) && (!root -> right)) return sum == 0;
+        return hasPathSum(root -> left, sum) || hasPathSum(root -> right, sum);
+    }
+};
+```
 
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
