@@ -3132,6 +3132,24 @@ public:
     }
 };
 ```
+### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
+想说的都在注释里
+```cpp
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true; //常规 
+        return box(root -> left, root -> right);
+    }
+    bool box(TreeNode* l, TreeNode* r){
+        if(l == NULL && r == NULL)  return true;
+        if(l == NULL || r == NULL)  return false;
+        return (l -> val == r -> val) //对应node的值要相同
+                    && (box(l -> left, r ->right)) //注意这两句，为了对称，对比左节点的左子节点和右节点的右子节点
+                        && (box(r -> left, l -> right)); //右节点的左子节点和左节点的右子节点
+    }
+};
+```
 
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
