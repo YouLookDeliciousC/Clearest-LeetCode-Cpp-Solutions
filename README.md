@@ -3163,7 +3163,31 @@ public:
     }
 };
 ```
-
+### [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+- 前序遍历数组的第一个数字是根节点
+- 找出根节点，得到根节点的val
+- 根据对比根节点的值找到根节点在中序遍历数组内的位置
+- 递归以上步骤，直到达到递归终止条件。
+- （中序遍历左子树不一定从[0]位开始。）
+```cpp
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.empty())    return NULL;
+        return box(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+    }
+    TreeNode* box(vector<int>& preorder,int ps, int pe,vector<int>& inorder, int is, int ie){
+        if(ps > pe || is > ie)  return NULL;
+        int flag = preorder[ps];
+        TreeNode* root = new TreeNode(flag);
+        int id = 0;
+        while(inorder[is + id] != flag)   ++ id;
+        root -> left = box(preorder, ps + 1, ps + id,  inorder, is, is+id -1);
+        root -> right = box(preorder,ps + id + 1, pe, inorder, is + id + 1, ie);
+        return root;
+    }
+};
+```
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
