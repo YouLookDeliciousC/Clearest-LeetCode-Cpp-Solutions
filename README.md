@@ -3188,6 +3188,323 @@ public:
     }
 };
 ```
+
+### [106. 从中序与后序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+- 后续遍历的根节点在postorder数组的最后一个
+- 根据根节点的值找到根节点在中序遍历数组中的位置。
+- 此时，中序遍历根节点的左边为左子树，右边为右子树。
+- 将以上三步进入递归。生成二叉树
+#### 难点在于：正确找到左右子树在inorder数组内的范围！
+```cpp
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(inorder.empty()) return NULL;
+        return box(inorder, 0, inorder.size() - 1, postorder, 0, postorder.size() - 1);
+    }
+    TreeNode* box(vector<int>& inorder, int iS, int iE, vector<int>& postorder, int pS, int pE){
+        if(iS > iE || pS > pE)  return NULL;
+        int rooot = postorder[pE];
+        int id = 0;
+        while(rooot != inorder[id]) ++ id;
+        TreeNode* root = new TreeNode(rooot);
+        root -> left = box(inorder, iS, id - 1, postorder, pS, pS + id -iS -1);
+        root -> right = box(inorder,id + 1, iE, postorder, pS + id - iS, pE - 1);
+        return root;
+    }
+};
+```
+### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
+#### 思路一
+- 使用队列遍历整个树。
+- 使用flag作为每一层的分界标
+- 使用last变量记录上一个节点，用来连接next。
+```cpp
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(!root)   return root;
+        queue<Node*> q;
+        Node* flag = new Node; // 用于记录每层树的结束。
+        Node* last = new Node; // 用于记录上一个节点，将上一个节点的next连接当前节点。
+
+        q.push(root); // 根推入队列
+        q.push(flag); // 第一层结束，用flag标记位置
+        while(q.size() >= 2){ //队列内到最后存在一个flag，因此 >2
+            Node* now = q.front(); // 取出当前节点。
+            q.pop();
+            if(now == flag){ // 如果到达每层末尾，last清空，再次推入flag
+                //last -> next = NULL;
+                last = NULL;
+                q.push(flag);
+                continue;
+            }
+            if(last == NULL){ // 说明是新的一层
+                last = now; 
+            }
+            else{ // 否则一定存在last节点
+                last -> next = now;
+                last = now; // 更新last节点
+            }
+            if(now -> left){ //压入新的节点。
+                q.push(now -> left);
+                q.push(now -> right);
+            }
+        }
+        return root; 
+    }
+};
+```
+
+#### 思路二 ----符合要求
+- 为了找到当前节点的右节点的next，可以使用当前节点已连接的next，即
+- `now -> right -> next = now -> next -> left;`
+```cpp
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(!root)   return NULL;
+        Node* now = new Node;
+        Node* leftmost = new Node;
+        now = root;
+        leftmost = root;
+        while(now -> left){
+            now -> left -> next = now -> right; // 当前节点的左节点的next指向右节点
+            if(now -> next){ //将当前节点的右节点的next指向 下一节点的左节点
+                now -> right -> next = now -> next -> left;
+                now = now -> next; // 更新当前节点
+            }
+            else{
+                now = leftmost -> left; // 若当前节点没有next，更新当前节点为当前层的最左节点的左节点。
+                leftmost = now;
+            }
+        }
+        return root;
+    }
+};
+```
+#### 思路三 ------ 拉链法，递归写法，符合要求
+- 也就是拉链法，先将以root 为中心的左右两部分连接起来，然后进入递归。
+```cpp
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(!root || !root -> left)   return root;
+        root -> left -> next = root -> right;
+        Node* now = new Node;
+        now = root -> left;
+        while(now -> left){
+            now -> right -> next = now -> next -> left;
+            now = now -> right;
+        }
+        root -> left = connect(root -> left);
+        root -> right = connect(root -> right);
+        return root;
+    }
+};
+```
+### [117. 填充每个节点的下一个右侧节点指针 II](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/)
+- 代码虽不优雅，但好歹思路还算清晰，且符合常量额外空间要求
+- 首先介绍参数
+    - `now` :记录当前处理的节点
+    - `leftmost` :记录当前层最左拥有child的节点
+    - `flat` :用来记录now 的next 之后的节点含有child的第一个节点
+    - `temp` :使用temp遍历now 的next，直到含有child的节点。
+- 1. 若now节点有左child，寻找now节点的右child，若没有右child，接着从now节点往next方向寻找第一个含有child的节点。
+- 2. 若now没有左chuild，只有右child，直接从now节点往next方向寻找第一个含有child的节点，并与它的child连接。
+- 3. 更细节的都在代码注释里，祝好！
+```cpp
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(!root || (!root -> left && !root -> right))  return root; //如果root为空或root没有没有左子树和右子树，直接返回
+        Node* now = new Node; // 记录当前处理的节点
+        Node* leftmost = new Node; // 记录当前层最左拥有child的节点
+        now = root;
+        leftmost = now -> left != NULL ? now -> left : now -> right;
+        while(now -> left || now -> right || now ){
+            Node* flag = new Node;
+            flag = NULL; // 用来记录now 的next 之后的节点含有child的第一个节点
+            if(now -> left){ //当前节点有左子树，寻找右子树或者更右边的节点。
+                if(now -> right){ //如果有右子树，左右相连
+                    now -> left -> next = now -> right;
+                }
+                else{ // 若没有右子树，寻找最近的👉节点
+                    Node* temp = new Node; // 使用temp遍历now 的next，直到含有child的节点。
+                    temp = now -> next;
+                    while(temp){
+                        if(temp-> left){ //有左节点就连上
+                            now -> left -> next = temp -> left;
+                            flag = temp;
+                            break;
+                        }
+                        else if(temp-> right){ // 若没有左节点就连右节点。
+                            now -> left -> next = temp -> right;
+                            flag = temp;
+                            break;
+                        }
+                        else    temp = temp -> next; // 若都没有，接着往next方向找
+                    }
+                }
+            }
+            if(now -> right){ // 右子树
+                Node* temp = new Node;
+                temp = now -> next;
+                while(temp){ // 直接寻找最近的👉子树
+                    if(temp -> left){ //与上面相同，有左连做
+                        now -> right -> next = temp -> left;
+                        flag = temp;
+                        break;
+                    }
+                    else if(temp -> right){ // 无左连右
+                        now -> right -> next = temp -> right;
+                        flag = temp;
+                        break;
+                    }
+                    else    temp = temp -> next; // 若无左右，接着往next方向找
+                }
+            }
+            if(flag){ // 更新now（当前处理的节点）到flag
+                now = flag;
+            }
+            else{ // 如果不存在flag，说明需要开始处理下一层
+                while(leftmost && (!leftmost -> left && !leftmost -> right)){ //找到下一层至少含有一个子节点的最左的节点
+                    leftmost = leftmost -> next;
+                }
+                if(leftmost){ // 更新now
+                    now = leftmost;
+                    if(now -> left){ // 更新预备leftmost
+                        leftmost = now -> left;
+                    }
+                    else    leftmost = now -> right;
+                }
+                else    break; //若不存在下一层的leftmost，说明遍历完成，跳出循环。
+            }
+        }
+        return root;
+    }
+};
+```
+### [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+#### 思路： 全盘搜索
+- 遇到指定节点，直接返回root，无需往下搜寻。
+- 向左右子树遍历，返回包含指定节点的子树。
+- 若左右子树都包含指定节点，则当前root为最近公共祖先。
+```cpp
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root || root == p || root == q) return root;
+        TreeNode* l = lowestCommonAncestor(root -> left, p, q);
+        TreeNode* r = lowestCommonAncestor(root -> right, p, q);
+        if(l && r)  return root;
+        return l ? l : r;
+    }
+};
+```
+### [297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
+```cpp
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) { //把树转化为字符串
+        if(!root)   return "";
+        string ans = "";
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){ 遍历二叉树，BFS
+            TreeNode* temp = q.front();
+            q.pop();
+            if(temp){
+                ans += to_string(temp -> val);
+                ans += ","; // 分割每个node
+                q.push(temp -> left);
+                q.push(temp -> right);
+            }else{
+                ans += "null,"; // 即使是空节点也要转换成字符串，因为要将字符串还原为树，null作为占位符
+            }
+        }
+        return ans;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) { // 把字符串转换为树
+        TreeNode* root = new TreeNode; // 创建根节点
+        if(data.empty())   return NULL; // 传统艺能
+        int j = 0;
+        string sub = "";
+        for(; data[j] >= '0' && data[j] <= '9' || data[j] == '-'; ++ j){} // 找到一个完整的数字在字符串的位置
+        if(data[0] == '-'){ // 处理负数情况
+            sub = data.substr(1, j-1);
+            data.erase(0, j+1);
+            int number = stoi(sub);
+            root -> val = -number;
+        }else{
+            sub = data.substr(0, j);
+            data.erase(0, j+1);
+            int number = stoi(sub);
+            root -> val = number;
+        }
+        queue<TreeNode*> q;
+        q.push(root); //root处理完毕，压入队列
+        int a = 1;
+        while(!data.empty()){ //开始处理左右节点
+            cout << q.front() -> val << endl;
+            TreeNode* l = new TreeNode;
+            TreeNode* r = new TreeNode;
+            if(data[0] == 'n'){ //左节点
+                l = NULL;
+                data.erase(0, 5);
+            }
+            else{
+                int i = 0;
+                for(i; (data[i] >= '0' && data[i] <= '9') || data[i] == '-'; ++ i){}
+                if(data[0] == '-'){
+                    sub = data.substr(1, i-1);
+                    data.erase(0, i+1);
+                    int num = stoi(sub);
+                    l -> val = - num;
+                    q.push(l);
+                }
+                else{
+                    sub = data.substr(0, i);
+                    data.erase(0, i+1);
+                    int num = stoi(sub);
+                    l -> val = num;
+                    q.push(l);
+                }
+            }
+            if(data[0] == 'n'){ // 右节点
+                r = NULL;
+                data.erase(0, 5);
+            }else{
+                int i = 0;
+                for(i; (data[i] >= '0' && data[i] <= '9') || data[i] == '-'; ++ i){}
+                if(data[0] == '-'){
+                    sub = data.substr(1, i-1);
+                    data.erase(0, i + 1);
+                    int num = stoi(sub);
+                    r -> val = - num;
+                    q.push(r);
+                }
+                else{
+                    sub = data.substr(0, i);
+                    data.erase(0, i + 1);
+                    int num = stoi(sub);
+                    r -> val = num;
+                    q.push(r);
+                }
+            }
+            TreeNode* n = q.front();
+            n -> left = l; //连接root 的 左右节点
+            n -> right = r;
+            q.pop();
+        }
+        return root;
+    }
+};
+```
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
