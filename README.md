@@ -3505,6 +3505,23 @@ public:
     }
 };
 ```
+
+### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
+- 对于二叉搜索树，我们可以通过中序遍历得到一个递增的有序序列。因此，中序遍历是二叉搜索树中最常用的遍历方法。
+```cpp
+class Solution {
+public:
+    long pre = LONG_MIN;
+    bool isValidBST(TreeNode* root) {
+        if(!root)   return true; //传统艺能
+        if(!isValidBST(root -> left))   return false; // 向左遍历，直到叶节点
+        if(pre >= root -> val)  return false; // 判断节点值是否大于上一个
+        pre = root -> val; // 更新pre
+        return isValidBST(root -> right); // 向右遍历
+    }
+};
+```
+
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
