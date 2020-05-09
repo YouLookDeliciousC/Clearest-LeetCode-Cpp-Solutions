@@ -3521,7 +3521,40 @@ public:
     }
 };
 ```
-
+### [173. 二叉搜索树迭代器](https://leetcode-cn.com/problems/binary-search-tree-iterator/)
+- 每个节点中的值必须大于（或等于）存储在其左侧子树中的任何值。
+- 每个节点中的值必须小于（或等于）存储在其右子树中的任何值。
+- 对于二叉搜索树，我们可以通过中序遍历得到一个递增的有序序列。因此，中序遍历是二叉搜索树中最常用的遍历方法。
+```cpp
+class BSTIterator {
+public:
+    stack<TreeNode*> stk;
+    BSTIterator(TreeNode* root) {
+        box(root);
+    }
+    void box(TreeNode* root){ //压栈函数
+        if(!root)   return;
+        while(root){
+            stk.push(root);
+            root = root -> left;
+        }
+    }
+    
+    /** @return the next smallest number */
+    int next() { //获取当前值
+        TreeNode* now = stk.top();
+        stk.pop();
+        int ans = now -> val; // 若有右子树，压入栈内
+        if(now -> right)  box(now -> right);
+        return ans;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !stk.empty();
+    }
+};
+```
 # 题库解析
 默认已经看过题目 🤡 点击标题可跳转对应题目网址。
 ## 数组
